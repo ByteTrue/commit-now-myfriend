@@ -428,3 +428,30 @@ export async function stageAllChanges(options: StageAllChangesOptions): Promise<
     inspection: await inspectGitRepository(options)
   };
 }
+
+export async function getRecentCommits(options: {
+  cwd: string;
+  env?: NodeJS.ProcessEnv;
+  limit?: number;
+  gitRunner?: GitCommandRunner;
+}): Promise<string[]> {
+  const gitRunner = options.gitRunner ?? defaultGitRunner;
+  const limit = options.limit ?? 10;
+
+  const result = await gitRunner(
+    options.cwd,
+    ["log", `--max-count=${limit}`, "--pretty=format:%s%n%b", "--no-merges"],
+    options.env
+  );
+
+  if (result.exitCode !== 0) {
+    return [];
+  }
+
+  const commits = result.stdout
+    .split("\n\n")
+    .map((commit) => commit.trim())
+    .filter((commit) => commit.length > 0);
+
+  return commits.slice(0, limit);
+}

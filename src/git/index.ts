@@ -12,4 +12,4 @@ export type {
   StageAllChangesOptions,
   StageAllChangesResult
 } from "./types.js";
-export { inspectGitRepository, stageAllChanges } from "./service.js";
+export { getRecentCommits, inspectGitRepository, stageAllChanges } from "./service.js";

@@ -1,7 +1,7 @@
 import { Command, CommanderError } from "commander";
 
 import { parseKeyValue, resolveEffectiveConfig, type ConfigValues } from "../config/index.js";
-import { inspectGitRepository, stageAllChanges } from "../git/index.js";
+import { getRecentCommits, inspectGitRepository, stageAllChanges } from "../git/index.js";
 import { createOutputRouter, EXIT_CODES, type CliWriteStream } from "../output/index.js";
 import { createCommitMessageProvider } from "../providers/index.js";
 import {
@@ -127,6 +127,7 @@ export function createCommitAction(
     const dependencies: CommitWorkflowDependencies = {
       commitRunner: runtime.workflow?.commitRunner ?? executeGitCommit,
       createCommitMessageProvider: runtime.workflow?.createCommitMessageProvider ?? createCommitMessageProvider,
+      getRecentCommits: runtime.workflow?.getRecentCommits ?? getRecentCommits,
       inspectGitRepository: runtime.workflow?.inspectGitRepository ?? inspectGitRepository,
       prompts:
         runtime.workflow?.prompts

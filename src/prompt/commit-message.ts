@@ -70,6 +70,7 @@ export function buildCommitMessagePrompt(input: GenerateCommitMessageInput): Com
     ].join("\n"),
     user: [
       formatRepo(input),
+      formatRecentCommits(input),
       formatFiles(input.files),
       "Diff:",
       input.diff
@@ -89,6 +90,18 @@ function formatRepo(input: GenerateCommitMessageInput): string {
   ].filter((line) => line !== undefined);
 
   return lines.length === 0 ? "" : `Repository metadata:\n${lines.join("\n")}`;
+}
+
+function formatRecentCommits(input: GenerateCommitMessageInput): string {
+  if (!input.recentCommits || input.recentCommits.length === 0) {
+    return "";
+  }
+
+  const commits = input.recentCommits
+    .map((commit, index) => `${index + 1}. ${commit}`)
+    .join("\n");
+
+  return `Recent commit messages (for style reference):\n${commits}`;
 }
 
 function formatFiles(files: GenerateCommitMessageInput["files"]): string {

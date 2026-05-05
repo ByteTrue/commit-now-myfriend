@@ -101,6 +101,28 @@ function applyConfigToProviderInput(input: GenerateCommitMessageInput, config: E
   };
 }
 
+async function enrichProviderInputWithHistory(
+  input: GenerateCommitMessageInput,
+  config: EffectiveConfig,
+  dependencies: CommitWorkflowDependencies,
+  options: { cwd: string; env?: NodeJS.ProcessEnv }
+): Promise<GenerateCommitMessageInput> {
+  if (config.promptStyle !== "auto") {
+    return input;
+  }
+
+  const recentCommits = await dependencies.getRecentCommits({
+    cwd: options.cwd,
+    env: options.env,
+    limit: 10
+  });
+
+  return {
+    ...input,
+    recentCommits
+  };
+}
+
 function buildOnboardingResult(dryRun: boolean, files: WorkflowFileView[], warnings: string[], message: string): CommitWorkflowResult {
   return createResult({
     committed: false,
@@ -349,9 +371,14 @@ export async function runCommitWorkflow({
     });
   }
 
-  const providerInput = applyConfigToProviderInput(
-    createProviderInput(stagedFiles, inspection),
-    resolvedConfig.values
+  const providerInput = await enrichProviderInputWithHistory(
+    applyConfigToProviderInput(
+      createProviderInput(stagedFiles, inspection),
+      resolvedConfig.values
+    ),
+    resolvedConfig.values,
+    dependencies,
+    { cwd, env }
   );
   const promptStyle = resolvedConfig.values.promptStyle;
   let attempt = 1;

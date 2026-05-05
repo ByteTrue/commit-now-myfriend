@@ -19,6 +19,7 @@ export interface GenerateCommitMessageInput {
   files: CommitFileInput[];
   diff: string;
   repo?: CommitRepoMetadata;
+  recentCommits?: string[];
   messageStyle?: "conventional" | string;
   customPrompt?: string;
   maxSubjectLength?: number;

@@ -65,6 +65,7 @@ export interface CommitRunnerResult {
 export interface CommitWorkflowDependencies {
   commitRunner(options: CommitRunnerOptions): Promise<CommitRunnerResult>;
   createCommitMessageProvider(config: ProviderConfig): CommitMessageProvider;
+  getRecentCommits(options: { cwd: string; env?: NodeJS.ProcessEnv; limit?: number }): Promise<string[]>;
   inspectGitRepository(options: InspectGitRepositoryOptions): Promise<GitInspection>;
   prompts: CommitWorkflowPrompts;
   resolveEffectiveConfig(options: ResolveConfigOptions): Promise<ResolvedConfig>;
