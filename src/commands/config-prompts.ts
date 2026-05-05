@@ -69,6 +69,21 @@ export function createClackConfigPrompts({ stdout }: CreateConfigPromptsOptions 
 
       return confirmed;
     },
+    async confirmSetOptionalConfig({ field }) {
+      const confirmed = await confirm({
+        initialValue: false,
+        message: field === "baseURL"
+          ? "Configure a custom base URL? (optional, for OpenAI-compatible providers)"
+          : "Add custom prompt instructions? (optional, appended to commit message generation)",
+        output: stdout
+      });
+
+      if (isCancel(confirmed)) {
+        return null;
+      }
+
+      return confirmed;
+    },
     async inputApiKey({ hasExistingValue }) {
       const value = await password({
         clearOnError: false,
@@ -213,6 +228,9 @@ export function createNonInteractiveConfigPrompts(): ConfigPanelPrompts {
   return {
     async confirmReset() {
       return unexpectedPromptCall("confirmReset");
+    },
+    async confirmSetOptionalConfig() {
+      return unexpectedPromptCall("confirmSetOptionalConfig");
     },
     async inputApiKey() {
       return unexpectedPromptCall("inputApiKey");

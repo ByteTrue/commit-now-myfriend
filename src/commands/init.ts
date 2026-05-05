@@ -199,11 +199,19 @@ async function createInteractiveInitPatch(input: {
   );
   const patch: ConfigValues = { model, provider };
 
-  if (provider === "openai-compatible") {
-    patch.baseURL = normalizeRequiredPromptValue(
-      await input.prompts.inputBaseURL({ currentValue: input.currentConfig.baseURL }),
-      "baseURL cannot be empty."
+  if (input.prompts.confirmSetOptionalConfig) {
+    const shouldConfigureBaseURL = requirePromptSelection(
+      await input.prompts.confirmSetOptionalConfig({ field: "baseURL" })
     );
+
+    if (shouldConfigureBaseURL) {
+      const baseURL = await input.prompts.inputBaseURL({ currentValue: input.currentConfig.baseURL });
+      const normalizedBaseURL = normalizeOptionalValue(baseURL ?? undefined);
+
+      if (normalizedBaseURL) {
+        patch.baseURL = normalizedBaseURL;
+      }
+    }
   }
 
   patch.apiKey = normalizeRequiredPromptValue(
@@ -217,11 +225,19 @@ async function createInteractiveInitPatch(input: {
 
   patch.promptStyle = promptStyle;
 
-  if (promptStyle === "custom") {
-    patch.customPrompt = normalizeRequiredPromptValue(
-      await input.prompts.inputCustomPrompt({ currentValue: input.currentConfig.customPrompt }),
-      "Custom prompt cannot be empty."
+  if (input.prompts.confirmSetOptionalConfig) {
+    const shouldConfigureCustomPrompt = requirePromptSelection(
+      await input.prompts.confirmSetOptionalConfig({ field: "customPrompt" })
     );
+
+    if (shouldConfigureCustomPrompt) {
+      const customPrompt = await input.prompts.inputCustomPrompt({ currentValue: input.currentConfig.customPrompt });
+      const normalizedCustomPrompt = normalizeOptionalValue(customPrompt ?? undefined);
+
+      if (normalizedCustomPrompt) {
+        patch.customPrompt = normalizedCustomPrompt;
+      }
+    }
   }
 
   return patch;

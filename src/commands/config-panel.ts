@@ -33,6 +33,7 @@ export type ConfigPanelResetTarget = ConfigKey | "all";
 
 export interface ConfigPanelPrompts {
   confirmReset(input: { target: ConfigPanelResetTarget }): Promise<boolean | null>;
+  confirmSetOptionalConfig?(input: { field: "baseURL" | "customPrompt" }): Promise<boolean | null>;
   inputApiKey(input: { hasExistingValue: boolean }): Promise<string | null>;
   inputBaseURL(input: { currentValue?: string }): Promise<string | null>;
   inputCustomPrompt(input: { currentValue?: string }): Promise<string | null>;
