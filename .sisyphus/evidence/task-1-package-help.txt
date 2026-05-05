@@ -1,0 +1,7 @@
+Usage: cnm [options]
+
+AI-assisted commit workflow CLI scaffold.
+
+Options:
+  -V, --version  output the version number
+  -h, --help     display help for command
