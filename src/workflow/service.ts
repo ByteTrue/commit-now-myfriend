@@ -57,24 +57,16 @@ function resolveProviderConfig(config: EffectiveConfig): ProviderConfig {
     throw missingConfig(config.provider, "model");
   }
 
-  if (config.provider === "openai-compatible") {
-    if (!config.baseURL || config.baseURL.trim().length === 0) {
-      throw missingConfig(config.provider, "baseURL");
-    }
-
-    return {
-      apiKey: config.apiKey,
-      baseURL: config.baseURL,
-      model: config.model,
-      provider: config.provider
-    };
+  if (config.provider === "openai-compatible" && (!config.baseURL || config.baseURL.trim().length === 0)) {
+    throw missingConfig(config.provider, "baseURL");
   }
 
   return {
     apiKey: config.apiKey,
+    baseURL: config.baseURL,
     model: config.model,
     provider: config.provider
-  };
+  } as ProviderConfig;
 }
 
 function createProviderInput(files: WorkflowFileView[], inspection: Awaited<ReturnType<CommitWorkflowDependencies["inspectGitRepository"]>>): GenerateCommitMessageInput {

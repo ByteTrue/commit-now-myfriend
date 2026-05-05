@@ -125,7 +125,7 @@ describe("config CLI", () => {
     const runtime = await setupCliRuntime();
     const rawApiKey = "test-interactive-init-api-key";
     const prompts = createConfigPromptStub({
-      confirmSetOptionalConfig: vi.fn<ConfigPanelPrompts["confirmSetOptionalConfig"]>().mockResolvedValue(true),
+      confirmSetOptionalConfig: vi.fn<NonNullable<ConfigPanelPrompts["confirmSetOptionalConfig"]>>().mockResolvedValue(true),
       inputApiKey: vi.fn<ConfigPanelPrompts["inputApiKey"]>().mockResolvedValue(rawApiKey),
       inputBaseURL: vi.fn<ConfigPanelPrompts["inputBaseURL"]>().mockResolvedValue("https://interactive.example/v1"),
       inputCustomPrompt: vi.fn<ConfigPanelPrompts["inputCustomPrompt"]>().mockResolvedValue("Prefer short imperative messages."),

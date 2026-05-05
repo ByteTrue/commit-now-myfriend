@@ -43,10 +43,56 @@ export function missingConfig(provider: AiProviderName, field: string): Provider
 }
 
 export function providerFailure(provider: AiProviderName, cause: unknown): ProviderError {
+  const details = summarizeErrorCause(cause);
+
   return new ProviderError({
     code: "provider_failure",
     provider,
-    message: `${provider} failed to generate a commit message.`,
+    message: details.length === 0
+      ? `${provider} failed to generate a commit message.`
+      : `${provider} failed to generate a commit message: ${details}.`,
     cause
   });
+}
+
+function summarizeErrorCause(cause: unknown): string {
+  if (cause instanceof Error) {
+    return summarizeErrorObject(cause);
+  }
+
+  if (typeof cause === "string") {
+    return truncateDetail(cause);
+  }
+
+  if (cause === null || typeof cause !== "object") {
+    return "";
+  }
+
+  return summarizeErrorObject(cause as Record<string, unknown>);
+}
+
+function summarizeErrorObject(error: Error | Record<string, unknown>): string {
+  const details = [
+    readErrorField(error, "status"),
+    readErrorField(error, "statusCode"),
+    readErrorField(error, "code"),
+    readErrorField(error, "message")
+  ];
+  const uniqueDetails = details.filter((detail, index) => detail.length > 0 && details.indexOf(detail) === index);
+
+  return truncateDetail(uniqueDetails.join(" "));
+}
+
+function readErrorField(error: Error | Record<string, unknown>, field: string): string {
+  const value = field in error ? error[field as keyof typeof error] : undefined;
+
+  if (typeof value === "number") {
+    return String(value);
+  }
+
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function truncateDetail(value: string): string {
+  return value.replace(/\s+/g, " ").trim().slice(0, 300);
 }

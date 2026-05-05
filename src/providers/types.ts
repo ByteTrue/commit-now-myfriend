@@ -44,6 +44,7 @@ export interface CommitMessageProvider {
 export interface BaseProviderConfig {
   provider: AiProviderName;
   apiKey?: string;
+  baseURL?: string;
   model: string;
   maxOutputTokens?: number;
 }
