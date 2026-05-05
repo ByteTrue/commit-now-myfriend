@@ -74,5 +74,8 @@ function validateConfig(config: GoogleGeminiProviderConfig): void {
 }
 
 function createDefaultClient(config: GoogleGeminiProviderConfig): GoogleGeminiClient {
-  return new GoogleGenAI({ apiKey: config.apiKey });
+  return new GoogleGenAI({
+    apiKey: config.apiKey,
+    baseUrl: config.baseURL
+  });
 }

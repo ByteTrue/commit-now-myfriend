@@ -102,7 +102,7 @@ export function createClackConfigPrompts({ stdout }: CreateConfigPromptsOptions 
         return null;
       }
 
-      return value.trim();
+      return value?.trim() || "";
     },
     async inputBaseURL({ currentValue }) {
       const value = await text({
@@ -116,7 +116,7 @@ export function createClackConfigPrompts({ stdout }: CreateConfigPromptsOptions 
         return null;
       }
 
-      return value.trim();
+      return typeof value === "string" ? value.trim() : "";
     },
     async inputCustomPrompt({ currentValue }) {
       const value = await text({
@@ -130,7 +130,7 @@ export function createClackConfigPrompts({ stdout }: CreateConfigPromptsOptions 
         return null;
       }
 
-      return value.trim();
+      return typeof value === "string" ? value.trim() : "";
     },
     async inputModel({ currentValue, provider }) {
       const value = await text({

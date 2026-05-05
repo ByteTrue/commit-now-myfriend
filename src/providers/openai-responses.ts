@@ -72,5 +72,9 @@ function validateConfig(config: OpenAiResponsesProviderConfig): void {
 }
 
 function createDefaultClient(config: OpenAiResponsesProviderConfig): OpenAiResponsesClient {
-  return new OpenAI({ apiKey: config.apiKey, maxRetries: 0 });
+  return new OpenAI({
+    apiKey: config.apiKey,
+    baseURL: config.baseURL,
+    maxRetries: 0
+  });
 }

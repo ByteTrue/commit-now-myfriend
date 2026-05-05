@@ -76,5 +76,9 @@ function validateConfig(config: AnthropicMessagesProviderConfig): void {
 }
 
 function createDefaultClient(config: AnthropicMessagesProviderConfig): AnthropicMessagesClient {
-  return new Anthropic({ apiKey: config.apiKey, maxRetries: 0 });
+  return new Anthropic({
+    apiKey: config.apiKey,
+    baseURL: config.baseURL,
+    maxRetries: 0
+  });
 }
