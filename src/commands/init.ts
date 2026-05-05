@@ -214,10 +214,14 @@ async function createInteractiveInitPatch(input: {
     }
   }
 
-  patch.apiKey = normalizeRequiredPromptValue(
-    await input.prompts.inputApiKey({ hasExistingValue: Boolean(input.currentConfig.apiKey) }),
-    "API key cannot be empty."
-  );
+  const apiKey = await input.prompts.inputApiKey({ hasExistingValue: Boolean(input.currentConfig.apiKey) });
+  const normalizedApiKey = normalizeOptionalValue(apiKey ?? undefined);
+
+  if (normalizedApiKey) {
+    patch.apiKey = normalizedApiKey;
+  } else if (!input.currentConfig.apiKey) {
+    throw new ConfigError("API key cannot be empty.");
+  }
 
   const promptStyle = requirePromptSelection(
     await input.prompts.selectPromptStyle({ currentPromptStyle: input.currentConfig.promptStyle })

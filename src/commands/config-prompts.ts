@@ -88,9 +88,12 @@ export function createClackConfigPrompts({ stdout }: CreateConfigPromptsOptions 
       const value = await password({
         clearOnError: false,
         mask: "*",
-        message: hasExistingValue ? "Enter the replacement API key." : "Enter the API key.",
+        message: hasExistingValue ? "Enter the replacement API key (press Enter to keep current)." : "Enter the API key.",
         output: stdout,
         validate(nextValue) {
+          if (hasExistingValue && !nextValue?.trim()) {
+            return undefined;
+          }
           return validateRequiredValue(nextValue, "API key cannot be empty.");
         }
       });
@@ -104,12 +107,9 @@ export function createClackConfigPrompts({ stdout }: CreateConfigPromptsOptions 
     async inputBaseURL({ currentValue }) {
       const value = await text({
         initialValue: currentValue,
-        message: "Enter the base URL.",
+        message: "Enter the base URL (leave empty to skip).",
         output: stdout,
-        placeholder: "https://api.example.com/v1",
-        validate(nextValue) {
-          return validateRequiredValue(nextValue, "baseURL cannot be empty. Use reset/unset to remove it.");
-        }
+        placeholder: "https://api.example.com/v1"
       });
 
       if (isCancel(value)) {
@@ -121,12 +121,9 @@ export function createClackConfigPrompts({ stdout }: CreateConfigPromptsOptions 
     async inputCustomPrompt({ currentValue }) {
       const value = await text({
         initialValue: currentValue,
-        message: "Enter the custom prompt.",
+        message: "Enter the custom prompt (leave empty to skip).",
         output: stdout,
-        placeholder: "Give extra instructions for commit generation.",
-        validate(nextValue) {
-          return validateRequiredValue(nextValue, "Custom prompt cannot be empty. Use reset/unset to remove it.");
-        }
+        placeholder: "Give extra instructions for commit generation."
       });
 
       if (isCancel(value)) {
@@ -138,7 +135,7 @@ export function createClackConfigPrompts({ stdout }: CreateConfigPromptsOptions 
     async inputModel({ currentValue, provider }) {
       const value = await text({
         initialValue: currentValue,
-        message: `Enter the default model for ${provider}.`,
+        message: `Enter the default model for ${provider} (press Enter to keep current).`,
         output: stdout,
         validate(nextValue) {
           return validateRequiredValue(nextValue, "Model cannot be empty.");

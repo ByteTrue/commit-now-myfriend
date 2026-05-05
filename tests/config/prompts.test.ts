@@ -61,13 +61,11 @@ describe("config prompts", () => {
       textCalls += 1;
 
       if (textCalls === 1) {
-        expect(options.validate?.("   ")).toBe("baseURL cannot be empty. Use reset/unset to remove it.");
-        expect(options.validate?.("https://valid.example/v1")).toBeUndefined();
+        expect(options.validate).toBeUndefined();
         return "https://valid.example/v1";
       }
 
-      expect(options.validate?.("   ")).toBe("Custom prompt cannot be empty. Use reset/unset to remove it.");
-      expect(options.validate?.("Use concise wording with spaces.")).toBeUndefined();
+      expect(options.validate).toBeUndefined();
       return "Use concise wording with spaces.";
     });
     const prompts = createClackConfigPrompts();
