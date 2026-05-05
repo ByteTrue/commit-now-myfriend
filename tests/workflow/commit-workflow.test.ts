@@ -124,6 +124,30 @@ async function runRootCommand(options: {
 }
 
 describe("cnm main workflow", { timeout: 20000 }, () => {
+  it("prompts first-time users to run init before inspecting repository changes", async () => {
+    const repo = await createTempGitRepo({ initialCommit: true });
+    await setupCliRuntime(repo.path);
+    delete process.env.CNM_API_KEY;
+    const io = createCliIo();
+    const providerCalls: Array<{ diff: string; files: string[] }> = [];
+    const createProvider = createProviderFactory(["feat: should not generate"], providerCalls);
+
+    const exitCode = await runRootCommand({
+      cwd: repo.path,
+      io,
+      workflow: {
+        createCommitMessageProvider: createProvider,
+        prompts: createPromptStub()
+      }
+    });
+
+    expect(exitCode).toBe(EXIT_CODES.ERROR);
+    expect(providerCalls).toEqual([]);
+    expect(io.stdout.read()).toBe("");
+    expect(io.stderr.read()).toContain("cnm is not configured yet. Run `cnm init` to choose an AI provider, model, and API key.");
+    await repo.cleanup();
+  });
+
   it("creates a real commit only after confirmed preview and preserves unstaged changes", async () => {
     const repo = await createTempGitRepo({ initialCommit: true });
     await setupCliRuntime(repo.path);

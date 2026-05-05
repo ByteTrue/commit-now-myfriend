@@ -101,6 +101,37 @@ function applyConfigToProviderInput(input: GenerateCommitMessageInput, config: E
   };
 }
 
+function buildOnboardingResult(dryRun: boolean, files: WorkflowFileView[], warnings: string[], message: string): CommitWorkflowResult {
+  return createResult({
+    committed: false,
+    dryRun,
+    error: message,
+    exitCode: EXIT_CODES.ERROR,
+    files,
+    message: null,
+    ok: false,
+    provider: null,
+    status: "blocked",
+    warnings
+  });
+}
+
+function summarizeOnboardingIssue(config: EffectiveConfig): string | null {
+  if (!config.apiKey || config.apiKey.trim().length === 0) {
+    return `cnm is not configured yet. Run \`cnm init\` to choose an AI provider, model, and API key.`;
+  }
+
+  if (!config.model || config.model.trim().length === 0) {
+    return `cnm is missing a model for ${config.provider}. Run \`cnm init\` or \`cnm config\` to finish setup.`;
+  }
+
+  if (config.provider === "openai-compatible" && (!config.baseURL || config.baseURL.trim().length === 0)) {
+    return "cnm is missing baseURL for openai-compatible. Run `cnm init` or `cnm config` to finish setup.";
+  }
+
+  return null;
+}
+
 function buildNoChangeResult(dryRun: boolean, files: WorkflowFileView[], warnings: string[], message: string): CommitWorkflowResult {
   return createResult({
     committed: false,
@@ -219,6 +250,11 @@ export async function runCommitWorkflow({
   let inspection = await dependencies.inspectGitRepository({ cwd, env });
   let warnings = toWarningMessages(resolvedConfig, inspection);
   const initialFiles = inspection.files.map(toWorkflowFileView);
+  const onboardingIssue = summarizeOnboardingIssue(resolvedConfig.values);
+
+  if (onboardingIssue && !json) {
+    return buildOnboardingResult(dryRun, initialFiles, warnings, onboardingIssue);
+  }
 
   if (inspection.blockingIssues.length > 0) {
     return buildBlockedInspectionResult(dryRun, initialFiles, warnings, inspection);

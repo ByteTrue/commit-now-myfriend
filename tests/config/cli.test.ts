@@ -121,6 +121,49 @@ describe("config CLI", () => {
     expect(storedConfig.apiKey).toBe("test-init-api-key");
   });
 
+  it("walks interactive init through required AI configuration", async () => {
+    const runtime = await setupCliRuntime();
+    const rawApiKey = "test-interactive-init-api-key";
+    const prompts = createConfigPromptStub({
+      inputApiKey: vi.fn<ConfigPanelPrompts["inputApiKey"]>().mockResolvedValue(rawApiKey),
+      inputBaseURL: vi.fn<ConfigPanelPrompts["inputBaseURL"]>().mockResolvedValue("https://interactive.example/v1"),
+      inputCustomPrompt: vi.fn<ConfigPanelPrompts["inputCustomPrompt"]>().mockResolvedValue("Prefer short imperative messages."),
+      inputModel: vi.fn<ConfigPanelPrompts["inputModel"]>().mockResolvedValue("local-model"),
+      selectPromptStyle: vi.fn<ConfigPanelPrompts["selectPromptStyle"]>().mockResolvedValue("custom"),
+      selectProvider: vi.fn<ConfigPanelPrompts["selectProvider"]>().mockResolvedValue("openai-compatible")
+    });
+    const io = createCliIo();
+
+    const exitCode = await runCli({
+      argv: ["init"],
+      configRuntime: {
+        isTty: true,
+        prompts
+      },
+      version: "0.1.0",
+      stderr: io.stderr.stream,
+      stdout: io.stdout.stream
+    });
+
+    const storedConfig = JSON.parse(await readFile(join(runtime.home, "config.json"), "utf8")) as Record<string, string>;
+
+    expect(exitCode).toBe(EXIT_CODES.SUCCESS);
+    expect(storedConfig).toEqual({
+      apiKey: rawApiKey,
+      baseURL: "https://interactive.example/v1",
+      customPrompt: "Prefer short imperative messages.",
+      model: "local-model",
+      promptStyle: "custom",
+      provider: "openai-compatible"
+    });
+    expect(io.stderr.read()).toContain("stored in plaintext");
+    expect(io.stderr.read()).not.toContain(rawApiKey);
+    expect(io.stdout.read()).toContain("Let's set up cnm for AI-assisted commits.");
+    expect(io.stdout.read()).toContain("apiKey=[redacted]");
+    expect(io.stdout.read()).toContain("Next: stage changes and run `cnm`");
+    expect(io.stdout.read()).not.toContain(rawApiKey);
+  });
+
   it("redacts api keys from config get json output", async () => {
     await setupCliRuntime();
     const setIo = createCliIo();

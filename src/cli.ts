@@ -106,7 +106,7 @@ function isUnknownCommandRequest(argv: string[]): boolean {
 export function buildCli({ commitRuntime, configRuntime, nodeEngine, version, stdout, stderr }: BuildCliOptions): Command {
   const program = new Command();
   const streams = { stdout, stderr };
-  const initCommand = createInitCommand(streams);
+  const initCommand = createInitCommand({ ...configRuntime, ...streams });
   const configCommand = createConfigCommand({ ...configRuntime, ...streams });
   const doctorCommand = createDoctorCommand({ ...streams, nodeEngine });
 

@@ -1,4 +1,4 @@
-import { Command } from "commander";
+import { Command, CommanderError } from "commander";
 
 import {
   ConfigError,
@@ -13,10 +13,13 @@ import {
   toJsonConfigView,
   writeUserConfig,
   type ConfigValues,
-  type EffectiveConfig
+  type EffectiveConfig,
+  type PromptStyle,
+  type ProviderType
 } from "../config/index.js";
-import { createOutputRouter } from "../output/index.js";
-import { type CommandRuntime } from "./config.js";
+import { createOutputRouter, EXIT_CODES, type CliWriteStream } from "../output/index.js";
+import { type ConfigPanelPrompts } from "./config-panel.js";
+import { createClackConfigPrompts } from "./config-prompts.js";
 import { PLAINTEXT_API_KEY_WARNING } from "./config-shared.js";
 
 interface GlobalCliOptions {
@@ -33,9 +36,40 @@ interface InitCommandOptions {
   provider?: string;
 }
 
+export interface InitCommandRuntime {
+  cwd?: string;
+  env?: NodeJS.ProcessEnv;
+  isTty?: boolean;
+  prompts?: ConfigPanelPrompts;
+  stdout?: CliWriteStream;
+  stderr?: CliWriteStream;
+}
+
 function normalizeOptionalValue(value: string | undefined): string | undefined {
   const normalizedValue = value?.trim();
   return normalizedValue ? normalizedValue : undefined;
+}
+
+function normalizeRequiredPromptValue(value: string | null, message: string): string {
+  if (value === null) {
+    throw new CommanderError(EXIT_CODES.USER_CANCEL, "cnm.cancelled", "User cancelled initialization.");
+  }
+
+  const normalizedValue = value.trim();
+
+  if (!normalizedValue) {
+    throw new ConfigError(message);
+  }
+
+  return normalizedValue;
+}
+
+function requirePromptSelection<T>(value: T | null): T {
+  if (value === null) {
+    throw new CommanderError(EXIT_CODES.USER_CANCEL, "cnm.cancelled", "User cancelled initialization.");
+  }
+
+  return value;
 }
 
 function resolveJsonOption(command: Command): boolean {
@@ -46,12 +80,31 @@ function resolveDryRun(command: Command): boolean {
   return Boolean(command.optsWithGlobals<GlobalCliOptions>().dryRun);
 }
 
-function getRuntimeCwd(runtime: CommandRuntime): string {
+function resolveIsTty(runtime: InitCommandRuntime): boolean {
+  if (runtime.isTty !== undefined) {
+    return runtime.isTty;
+  }
+
+  return Boolean(process.stdin.isTTY && process.stdout.isTTY);
+}
+
+function getRuntimeCwd(runtime: InitCommandRuntime): string {
   return runtime.cwd ?? process.cwd();
 }
 
-function getRuntimeEnv(runtime: CommandRuntime): NodeJS.ProcessEnv {
+function getRuntimeEnv(runtime: InitCommandRuntime): NodeJS.ProcessEnv {
   return runtime.env ?? process.env;
+}
+
+function hasExplicitInitOptions(options: InitCommandOptions): boolean {
+  return Boolean(
+    normalizeOptionalValue(options.provider)
+    || normalizeOptionalValue(options.model)
+    || normalizeOptionalValue(options.baseUrl)
+    || normalizeOptionalValue(options.promptStyle)
+    || normalizeOptionalValue(options.customPrompt)
+    || normalizeOptionalValue(options.apiKey)
+  );
 }
 
 function toInitPatch(options: InitCommandOptions): ConfigValues {
@@ -126,7 +179,85 @@ function toEffectiveConfig(config: ConfigValues): EffectiveConfig {
   };
 }
 
-export function createInitCommand(runtime: CommandRuntime = {}): Command {
+function resolveModelInitialValue(currentConfig: EffectiveConfig, provider: ProviderType): string {
+  return currentConfig.provider === provider ? currentConfig.model : getDefaultModel(provider);
+}
+
+async function createInteractiveInitPatch(input: {
+  currentConfig: EffectiveConfig;
+  prompts: ConfigPanelPrompts;
+}): Promise<ConfigValues> {
+  const provider = requirePromptSelection(
+    await input.prompts.selectProvider({ currentProvider: input.currentConfig.provider })
+  );
+  const model = normalizeRequiredPromptValue(
+    await input.prompts.inputModel({
+      currentValue: resolveModelInitialValue(input.currentConfig, provider),
+      provider
+    }),
+    "Model cannot be empty."
+  );
+  const patch: ConfigValues = { model, provider };
+
+  if (provider === "openai-compatible") {
+    patch.baseURL = normalizeRequiredPromptValue(
+      await input.prompts.inputBaseURL({ currentValue: input.currentConfig.baseURL }),
+      "baseURL cannot be empty."
+    );
+  }
+
+  patch.apiKey = normalizeRequiredPromptValue(
+    await input.prompts.inputApiKey({ hasExistingValue: Boolean(input.currentConfig.apiKey) }),
+    "API key cannot be empty."
+  );
+
+  const promptStyle = requirePromptSelection(
+    await input.prompts.selectPromptStyle({ currentPromptStyle: input.currentConfig.promptStyle })
+  );
+
+  patch.promptStyle = promptStyle;
+
+  if (promptStyle === "custom") {
+    patch.customPrompt = normalizeRequiredPromptValue(
+      await input.prompts.inputCustomPrompt({ currentValue: input.currentConfig.customPrompt }),
+      "Custom prompt cannot be empty."
+    );
+  }
+
+  return patch;
+}
+
+async function runInteractiveInit(input: {
+  cwd: string;
+  env: NodeJS.ProcessEnv;
+  prompts: ConfigPanelPrompts;
+  router: ReturnType<typeof createOutputRouter>;
+}): Promise<void> {
+  const userConfig = await loadUserConfig({ cwd: input.cwd, env: input.env });
+  const currentConfig = toEffectiveConfig(toInitializedConfig(userConfig, {}));
+
+  input.router.writeHuman("Let's set up cnm for AI-assisted commits.", "stdout");
+  const patch = await createInteractiveInitPatch({ currentConfig, prompts: input.prompts });
+  const initializedConfig = toInitializedConfig(userConfig, patch);
+  const effectiveConfig = toEffectiveConfig(initializedConfig);
+
+  input.router.writeHuman(PLAINTEXT_API_KEY_WARNING, "stderr");
+  const result = await writeUserConfig(initializedConfig, { cwd: input.cwd, env: input.env });
+
+  for (const warning of result.warnings) {
+    input.router.writeHuman(`Warning: ${warning}`, "stderr");
+  }
+
+  input.router.writeHuman(`Initialized user config at ${result.path}.`, "stdout");
+
+  for (const line of toHumanConfigLines(effectiveConfig)) {
+    input.router.writeHuman(line, "stdout");
+  }
+
+  input.router.writeHuman("Next: stage changes and run `cnm`, or run `cnm doctor` to check your setup.", "stdout");
+}
+
+export function createInitCommand(runtime: InitCommandRuntime = {}): Command {
   const command = new Command("init");
 
   command
@@ -146,6 +277,21 @@ export function createInitCommand(runtime: CommandRuntime = {}): Command {
       const dryRun = resolveDryRun(this);
       const cwd = getRuntimeCwd(runtime);
       const env = getRuntimeEnv(runtime);
+      const shouldUseInteractiveInit = !router.isJson
+        && !dryRun
+        && !hasExplicitInitOptions(options)
+        && (Boolean(runtime.prompts) || resolveIsTty(runtime));
+
+      if (shouldUseInteractiveInit) {
+        await runInteractiveInit({
+          cwd,
+          env,
+          prompts: runtime.prompts ?? createClackConfigPrompts({ stdout: process.stdout }),
+          router
+        });
+        return;
+      }
+
       const patch = toInitPatch(options);
       const userConfig = await loadUserConfig({ cwd, env });
       const initializedConfig = toInitializedConfig(userConfig, patch);
