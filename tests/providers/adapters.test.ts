@@ -50,6 +50,25 @@ describe("provider adapters", () => {
     expect(create.mock.calls[0]?.[0].messages[0]?.content).toContain("Prefer a provider scope.");
   });
 
+  it("reports malformed OpenAI-compatible responses with a response snippet", async () => {
+    const htmlResponse = "<!DOCTYPE html><html lang=\"zh-CN\"><body>login page</body></html>";
+    const create = vi.fn().mockResolvedValue(htmlResponse);
+    const provider = createOpenAiCompatibleProvider(
+      { provider: "openai-compatible", apiKey: "test-key", model: "chat-model", baseURL: "https://example.invalid" },
+      { openAiCompatible: () => ({ chat: { completions: { create } } }) }
+    );
+
+    const error = await provider.generateCommitMessage(input).catch((error: unknown) => error as ProviderError);
+
+    expect(error).toBeInstanceOf(ProviderError);
+    expect(error).toMatchObject({ code: "provider_failure", provider: "openai-compatible" });
+    expect(error.message).toContain("unexpected response from the API");
+    expect(error.message).toContain("baseURL");
+    expect(error.message).toContain("/v1");
+    expect(error.message).toContain("<!DOCTYPE html>");
+    expect(error.message).not.toContain("Cannot read properties of undefined");
+  });
+
   it("calls OpenAI Responses separately from Chat Completions", async () => {
     const create = vi.fn<OpenAiResponsesClient["responses"]["create"]>().mockResolvedValue({
       id: "responses-id",
