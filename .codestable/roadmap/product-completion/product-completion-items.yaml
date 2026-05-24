@@ -1,0 +1,121 @@
+roadmap: product-completion
+created: 2026-05-24
+
+items:
+  - slug: command-surface-core
+    description: 收敛 cnm / cnm auto / setup commands，并移除旧命令入口
+    depends_on: []
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 1.
+
+  - slug: preferences-onboarding
+    description: 建立 private/shared preferences、Secret Store 默认凭证保存和 first-run onboarding
+    depends_on: [command-surface-core]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 2.
+
+  - slug: working-tree-scope-safety
+    description: 建立 working tree Commit Scope、pathspec/staged/untracked 策略、预算和安全 blocker
+    depends_on: [command-surface-core]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phases 3-4.
+
+  - slug: tool-call-runtime
+    description: 建立 provider-native Tool Call Loop、Domain Tools、tool validation 和 loop limits
+    depends_on: [working-tree-scope-safety]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 5.
+
+  - slug: autonomous-commit-loop
+    description: 用 Tool Call Runtime 驱动 Autonomous Commit 的 plan 和 local commit creation
+    depends_on: [tool-call-runtime]
+    status: done
+    feature: null
+    minimal_loop: true
+    notes: Minimal loop; historical backfill from docs/implementation-todo Phase 6.
+
+  - slug: transactional-file-split
+    description: 支持 File-level Commit Split、split limitation、index snapshot 和 commit transaction rollback
+    depends_on: [autonomous-commit-loop]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 7.
+
+  - slug: provider-protocols
+    description: 适配 OpenAI Responses、OpenAI-compatible、Anthropic Messages、Google Gemini 的 native tool calls
+    depends_on: [tool-call-runtime]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 8.
+
+  - slug: interactive-commit-tui
+    description: 建立 Bubble Tea Full-screen TUI shell、scope/diff/AI activity/plan review/message review
+    depends_on: [working-tree-scope-safety, tool-call-runtime]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phases 9 and 15.
+
+  - slug: tui-commit-execution
+    description: 在 TUI 中执行 single/multi commit，复用 hook respect、message retry、snapshot 和 transaction 行为
+    depends_on: [interactive-commit-tui, transactional-file-split]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 10.
+
+  - slug: interactive-repair
+    description: 支持 conflict repair 的 TUI handoff、eligible file writes、read-before-write 和确认应用
+    depends_on: [tui-commit-execution]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 11.
+
+  - slug: doctor-provider-probing
+    description: 让 doctor 默认本地诊断，并提供显式 provider probe 和 machine output 状态
+    depends_on: [preferences-onboarding, provider-protocols]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 12.
+
+  - slug: distribution-docs-release
+    description: 更新 README/CLI docs/privacy/distribution，配置 native binary release 与 npm wrapper
+    depends_on: [command-surface-core]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 13.
+
+  - slug: completion-audit
+    description: 对产品语义、help、JSON output、smoke tests、release path 做最终清理和验证
+    depends_on:
+      [
+        command-surface-core,
+        preferences-onboarding,
+        working-tree-scope-safety,
+        tool-call-runtime,
+        autonomous-commit-loop,
+        transactional-file-split,
+        provider-protocols,
+        interactive-commit-tui,
+        tui-commit-execution,
+        interactive-repair,
+        doctor-provider-probing,
+        distribution-docs-release,
+      ]
+    status: done
+    feature: null
+    minimal_loop: false
+    notes: Historical backfill from docs/implementation-todo Phase 14.
