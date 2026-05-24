@@ -7,3 +7,4 @@ coverage/
 .cnm/
 .pnpm-store/
 .pi-lens/
+.pi/
