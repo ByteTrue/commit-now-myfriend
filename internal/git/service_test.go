@@ -360,27 +360,34 @@ func TestRollbackCommitTransactionDetectsStatusChange(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CaptureCommitTransactionSnapshot error: %v", err)
 	}
+	// Simulate a partial transaction: one commit succeeds, then something fails.
+	// After the first commit, status differs from snapshot — rollback should still succeed.
 	repo.writeFile(t, "docs/guide.md", []byte("docs\n"))
 	runGit(t, repo.path, nil, "add", "docs/guide.md")
 	runGit(t, repo.path, nil, "commit", "-m", "docs: add guide")
+	// Add an untracked file (not staged) to simulate a concurrent worktree change.
 	repo.writeFile(t, "concurrent.txt", []byte("concurrent\n"))
 
 	rollback := RollbackCommitTransaction(repo.path, nil, snapshot, nil)
-	if rollback.RolledBack || rollback.Status != "unsafe" {
-		t.Fatalf("expected unsafe rollback refusal, got %+v", rollback)
+	if !rollback.RolledBack {
+		t.Fatalf("expected rollback to succeed, got %+v", rollback)
 	}
-	if !strings.Contains(rollback.Message, "working tree changed") {
-		t.Fatalf("unexpected rollback message: %+v", rollback)
+	// HEAD is restored to snapshot.Head.
+	if head := strings.TrimSpace(runGit(t, repo.path, nil, "rev-parse", "HEAD")); head != snapshot.Head {
+		t.Fatalf("expected head rollback to %s, got %s", snapshot.Head, head)
 	}
-	if head := strings.TrimSpace(runGit(t, repo.path, nil, "rev-parse", "HEAD")); head == snapshot.Head {
-		t.Fatalf("expected head to remain on newer commit when rollback is refused")
-	}
+	// Worktree file created after snapshot is untouched by reset --mixed.
 	content, readErr := os.ReadFile(filepath.Join(repo.path, "concurrent.txt"))
 	if readErr != nil {
 		t.Fatalf("read concurrent file failed: %v", readErr)
 	}
 	if strings.TrimSpace(string(content)) != "concurrent" {
 		t.Fatalf("expected concurrent worktree file to remain untouched, got %q", strings.TrimSpace(string(content)))
+	}
+	// Status will differ from snapshot because docs/guide.md is now untracked again
+	// and concurrent.txt was added — rollback reports the change.
+	if rollback.Status != "rolled_back_with_status_change" {
+		t.Fatalf("expected rolled_back_with_status_change, got %+v", rollback)
 	}
 }
 

@@ -8,7 +8,6 @@ import (
 )
 
 const defaultMaxOutputTokens = 8192
-const responseSnippetLength = 500
 
 const (
 	defaultOpenAIBaseURL    = "https://api.openai.com/v1"
@@ -63,18 +62,6 @@ func applyUserAgent(request *http.Request, cfg ProviderConfig) {
 	}
 }
 
-func responseSnippet(body []byte) string {
-	serialized := strings.Join(strings.Fields(string(body)), " ")
-	runes := []rune(serialized)
-	if len(runes) > responseSnippetLength {
-		return string(runes[:responseSnippetLength]) + "…"
-	}
-	if serialized == "" {
-		return "<empty>"
-	}
-	return serialized
-}
-
 func executeJSONRequest(client HTTPDoer, request *http.Request, payload any, destination any) error {
 	body, err := json.Marshal(payload)
 	if err != nil {
@@ -91,10 +78,10 @@ func executeJSONRequest(client HTTPDoer, request *http.Request, payload any, des
 		return err
 	}
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		return fmt.Errorf("http %d: %s", response.StatusCode, responseSnippet(responseBody))
+		return fmt.Errorf("http %d", response.StatusCode)
 	}
 	if err := json.Unmarshal(responseBody, destination); err != nil {
-		return fmt.Errorf("decode response: %w; snippet: %s", err, responseSnippet(responseBody))
+		return fmt.Errorf("decode response: %w", err)
 	}
 	return nil
 }

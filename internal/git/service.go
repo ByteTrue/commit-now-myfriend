@@ -413,13 +413,6 @@ func RollbackCommitTransaction(cwd string, env map[string]string, snapshot Commi
 	if strings.TrimSpace(snapshot.Head) == "" {
 		return CommitTransactionRollbackResult{RolledBack: false, Status: "unsafe", Message: "missing transaction start head"}
 	}
-	statusBeforeReset := normalizeRunnerResult(gitRunner(cwd, []string{"status", "--porcelain=v1", "-z", "--untracked-files=all"}, env))
-	if statusBeforeReset.ExitCode != 0 {
-		return CommitTransactionRollbackResult{RolledBack: false, Status: "failed", Message: "rollback safety check failed"}
-	}
-	if statusBeforeReset.Stdout != snapshot.Status {
-		return CommitTransactionRollbackResult{RolledBack: false, Status: "unsafe", Message: "working tree changed since transaction start"}
-	}
 	resetResult := normalizeRunnerResult(gitRunner(cwd, []string{"reset", "--mixed", snapshot.Head}, env))
 	if resetResult.ExitCode != 0 {
 		return CommitTransactionRollbackResult{RolledBack: false, Status: "failed", Message: firstNonEmpty(resetResult.Stderr, resetResult.Stdout, "git reset failed")}
