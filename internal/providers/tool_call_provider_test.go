@@ -159,3 +159,73 @@ func TestToolCallProviderPreservesConversationStateForToolResults(t *testing.T) 
 		})
 	}
 }
+
+func TestToolCallProviderDoesNotLeakProviderResponseBodyInHTTPError(t *testing.T) {
+	apiKey := "test-key"
+	provider, err := CreateToolCallProvider(ToolCallProviderOptions{
+		Config: ProviderConfig{
+			Provider: config.ProviderOpenAIResponses,
+			APIKey:   &apiKey,
+			Model:    "responses-model",
+			HTTPClient: roundTripFunc(func(request *http.Request) (*http.Response, error) {
+				return &http.Response{
+					StatusCode: 500,
+					Body:       io.NopCloser(strings.NewReader(`{"error":"provider exploded","secret":"sk-live-123"}`)),
+					Header:     make(http.Header),
+				}, nil
+			}),
+		},
+		Instructions: "Use read-before-write.",
+		Input:        "Resolve conflict.txt.",
+		Tools:        []runtimex.ToolName{runtimex.ToolReadFile, runtimex.ToolRepairFile, runtimex.ToolFinish},
+	})
+	if err != nil {
+		t.Fatalf("CreateToolCallProvider error: %v", err)
+	}
+	_, err = provider.NextToolCalls(nil)
+	if err == nil {
+		t.Fatal("expected HTTP error")
+	}
+	message := err.Error()
+	if !strings.Contains(message, "provider request failed with http 500") {
+		t.Fatalf("unexpected error message: %s", message)
+	}
+	if strings.Contains(message, "provider exploded") || strings.Contains(message, "sk-live-123") {
+		t.Fatalf("error leaked provider response body: %s", message)
+	}
+}
+
+func TestToolCallProviderDoesNotLeakProviderResponseBodyInParseError(t *testing.T) {
+	apiKey := "test-key"
+	provider, err := CreateToolCallProvider(ToolCallProviderOptions{
+		Config: ProviderConfig{
+			Provider: config.ProviderOpenAIResponses,
+			APIKey:   &apiKey,
+			Model:    "responses-model",
+			HTTPClient: roundTripFunc(func(request *http.Request) (*http.Response, error) {
+				return &http.Response{
+					StatusCode: 200,
+					Body:       io.NopCloser(strings.NewReader(`{"output":"not-a-valid-tool-response","secret":"sk-live-456"}`)),
+					Header:     make(http.Header),
+				}, nil
+			}),
+		},
+		Instructions: "Use read-before-write.",
+		Input:        "Resolve conflict.txt.",
+		Tools:        []runtimex.ToolName{runtimex.ToolReadFile, runtimex.ToolRepairFile, runtimex.ToolFinish},
+	})
+	if err != nil {
+		t.Fatalf("CreateToolCallProvider error: %v", err)
+	}
+	_, err = provider.NextToolCalls(nil)
+	if err == nil {
+		t.Fatal("expected parse error")
+	}
+	message := err.Error()
+	if !strings.Contains(message, "provider response parse error:") {
+		t.Fatalf("unexpected error message: %s", message)
+	}
+	if strings.Contains(message, "not-a-valid-tool-response") || strings.Contains(message, "sk-live-456") {
+		t.Fatalf("error leaked provider response body: %s", message)
+	}
+}

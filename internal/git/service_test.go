@@ -366,11 +366,21 @@ func TestRollbackCommitTransactionDetectsStatusChange(t *testing.T) {
 	repo.writeFile(t, "concurrent.txt", []byte("concurrent\n"))
 
 	rollback := RollbackCommitTransaction(repo.path, nil, snapshot, nil)
-	if !rollback.RolledBack || rollback.Status != "rolled_back_with_status_change" {
-		t.Fatalf("expected rollback with status change, got %+v", rollback)
+	if rollback.RolledBack || rollback.Status != "unsafe" {
+		t.Fatalf("expected unsafe rollback refusal, got %+v", rollback)
 	}
-	if head := strings.TrimSpace(runGit(t, repo.path, nil, "rev-parse", "HEAD")); head != snapshot.Head {
-		t.Fatalf("expected head rollback to %s, got %s", snapshot.Head, head)
+	if !strings.Contains(rollback.Message, "working tree changed") {
+		t.Fatalf("unexpected rollback message: %+v", rollback)
+	}
+	if head := strings.TrimSpace(runGit(t, repo.path, nil, "rev-parse", "HEAD")); head == snapshot.Head {
+		t.Fatalf("expected head to remain on newer commit when rollback is refused")
+	}
+	content, readErr := os.ReadFile(filepath.Join(repo.path, "concurrent.txt"))
+	if readErr != nil {
+		t.Fatalf("read concurrent file failed: %v", readErr)
+	}
+	if strings.TrimSpace(string(content)) != "concurrent" {
+		t.Fatalf("expected concurrent worktree file to remain untouched, got %q", strings.TrimSpace(string(content)))
 	}
 }
 

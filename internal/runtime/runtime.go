@@ -113,103 +113,127 @@ func (r *ToolCallRuntime) executeToolCall(call ToolCallRequest) ToolCallResult {
 	}
 	switch call.Name {
 	case ToolInspectCommitScope:
-		if r.tools.inspectCommitScope == nil {
-			return invalidToolCall(call, "tool_unavailable", "inspect_commit_scope is not available.")
-		}
-		scope, err := r.tools.inspectCommitScope()
-		if err != nil {
-			return ToolCallResult{CallID: call.ID, Name: call.Name, OK: false, Error: &ToolCallError{Code: "tool_failed", Message: err.Error()}}
-		}
-		r.inspectedScope = true
-		return ToolCallResult{CallID: call.ID, Name: call.Name, OK: true, Result: scope}
+		return r.executeInspectCommitScope(call)
 	case ToolGetDiff:
-		if r.tools.getDiff == nil {
-			return invalidToolCall(call, "tool_unavailable", "get_diff is not available.")
-		}
-		diff, err := r.tools.getDiff()
-		if err != nil {
-			return ToolCallResult{CallID: call.ID, Name: call.Name, OK: false, Error: &ToolCallError{Code: "tool_failed", Message: err.Error()}}
-		}
-		return ToolCallResult{CallID: call.ID, Name: call.Name, OK: true, Result: diff}
+		return r.executeGetDiff(call)
 	case ToolReadFile:
-		if !r.contextPolicy.FileReadsAllowed {
-			return invalidToolCall(call, "context_policy_denied", "read_file is disabled by the active Context Policy.")
-		}
-		if r.tools.readFile == nil {
-			return invalidToolCall(call, "tool_unavailable", "read_file is not available.")
-		}
-		path := stringArgument(call.Arguments, "path")
-		if strings.TrimSpace(path) == "" {
-			return invalidToolCall(call, "invalid_arguments", "read_file requires a non-empty path.")
-		}
-		file, err := r.tools.readFile(path)
-		if err != nil {
-			return ToolCallResult{CallID: call.ID, Name: call.Name, OK: false, Error: &ToolCallError{Code: "tool_failed", Message: err.Error()}}
-		}
-		r.readFiles[path] = true
-		return ToolCallResult{CallID: call.ID, Name: call.Name, OK: true, Result: file}
+		return r.executeReadFile(call)
 	case ToolPreviewCommit:
-		if r.tools.previewCommit == nil {
-			return invalidToolCall(call, "tool_unavailable", "preview_commit is not available.")
-		}
-		message := stringArgument(call.Arguments, "message")
-		if strings.TrimSpace(message) == "" {
-			return invalidToolCall(call, "invalid_arguments", "preview_commit requires a non-empty message.")
-		}
-		preview, err := r.tools.previewCommit(CommitPreviewInput{Message: message})
-		if err != nil {
-			return ToolCallResult{CallID: call.ID, Name: call.Name, OK: false, Error: &ToolCallError{Code: "tool_failed", Message: err.Error()}}
-		}
-		return ToolCallResult{CallID: call.ID, Name: call.Name, OK: true, Result: preview}
+		return r.executePreviewCommit(call)
 	case ToolCreateCommits:
-		if r.tools.createCommits == nil {
-			return invalidToolCall(call, "tool_unavailable", "create_commits is not available.")
-		}
-		if !r.inspectedScope {
-			return invalidToolCall(call, "inspect_before_create_required", "create_commits requires a successful inspect_commit_scope call first.")
-		}
-		input, err := createCommitsInputFromArguments(call.Arguments)
-		if err != nil {
-			return invalidToolCall(call, "invalid_arguments", err.Error())
-		}
-		created, err := r.tools.createCommits(input)
-		if err != nil {
-			return ToolCallResult{CallID: call.ID, Name: call.Name, OK: false, Error: &ToolCallError{Code: "tool_failed", Message: err.Error()}}
-		}
-		return ToolCallResult{CallID: call.ID, Name: call.Name, OK: true, Result: created}
+		return r.executeCreateCommits(call)
 	case ToolRepairFile:
-		if r.tools.repairFile == nil {
-			return invalidToolCall(call, "tool_unavailable", "repair_file is not available.")
-		}
-		path := stringArgument(call.Arguments, "path")
-		if strings.TrimSpace(path) == "" {
-			return invalidToolCall(call, "invalid_arguments", "repair_file requires a non-empty path.")
-		}
-		content := stringArgument(call.Arguments, "content")
-		if strings.TrimSpace(content) == "" {
-			return invalidToolCall(call, "invalid_arguments", "repair_file requires non-empty content.")
-		}
-		if !r.readFiles[path] {
-			return invalidToolCall(call, "read_before_write_required", "repair_file requires a successful read_file call for the same path first.")
-		}
-		if !r.repairAllowed(path) {
-			return invalidToolCall(call, "repair_path_not_allowed", "repair_file can only write eligible conflicted files in Interactive Repair.")
-		}
-		confirmed, err := r.confirmRepairWrite(RepairFileInput{Path: path, Content: content})
-		if err != nil {
-			return ToolCallResult{CallID: call.ID, Name: call.Name, OK: false, Error: &ToolCallError{Code: "tool_failed", Message: err.Error()}}
-		}
-		if !confirmed {
-			return invalidToolCall(call, "repair_confirmation_required", "repair_file requires developer confirmation before applying writes.")
-		}
-		repair, err := r.tools.repairFile(RepairFileInput{Path: path, Content: content})
-		if err != nil {
-			return ToolCallResult{CallID: call.ID, Name: call.Name, OK: false, Error: &ToolCallError{Code: "tool_failed", Message: err.Error()}}
-		}
-		return ToolCallResult{CallID: call.ID, Name: call.Name, OK: true, Result: repair}
+		return r.executeRepairFile(call)
 	default:
 		return invalidToolCall(call, "unknown_tool", fmt.Sprintf("Tool %q is not exposed by the runtime.", call.Name))
 	}
+}
+
+func (r *ToolCallRuntime) executeInspectCommitScope(call ToolCallRequest) ToolCallResult {
+	if r.tools.inspectCommitScope == nil {
+		return invalidToolCall(call, "tool_unavailable", "inspect_commit_scope is not available.")
+	}
+	scope, err := r.tools.inspectCommitScope()
+	if err != nil {
+		return toolFailed(call, err)
+	}
+	r.inspectedScope = true
+	return toolSucceeded(call, scope)
+}
+
+func (r *ToolCallRuntime) executeGetDiff(call ToolCallRequest) ToolCallResult {
+	if r.tools.getDiff == nil {
+		return invalidToolCall(call, "tool_unavailable", "get_diff is not available.")
+	}
+	diff, err := r.tools.getDiff()
+	if err != nil {
+		return toolFailed(call, err)
+	}
+	return toolSucceeded(call, diff)
+}
+
+func (r *ToolCallRuntime) executeReadFile(call ToolCallRequest) ToolCallResult {
+	if !r.contextPolicy.FileReadsAllowed {
+		return invalidToolCall(call, "context_policy_denied", "read_file is disabled by the active Context Policy.")
+	}
+	if r.tools.readFile == nil {
+		return invalidToolCall(call, "tool_unavailable", "read_file is not available.")
+	}
+	path := stringArgument(call.Arguments, "path")
+	if strings.TrimSpace(path) == "" {
+		return invalidToolCall(call, "invalid_arguments", "read_file requires a non-empty path.")
+	}
+	file, err := r.tools.readFile(path)
+	if err != nil {
+		return toolFailed(call, err)
+	}
+	r.readFiles[path] = true
+	return toolSucceeded(call, file)
+}
+
+func (r *ToolCallRuntime) executePreviewCommit(call ToolCallRequest) ToolCallResult {
+	if r.tools.previewCommit == nil {
+		return invalidToolCall(call, "tool_unavailable", "preview_commit is not available.")
+	}
+	message := stringArgument(call.Arguments, "message")
+	if strings.TrimSpace(message) == "" {
+		return invalidToolCall(call, "invalid_arguments", "preview_commit requires a non-empty message.")
+	}
+	preview, err := r.tools.previewCommit(CommitPreviewInput{Message: message})
+	if err != nil {
+		return toolFailed(call, err)
+	}
+	return toolSucceeded(call, preview)
+}
+
+func (r *ToolCallRuntime) executeCreateCommits(call ToolCallRequest) ToolCallResult {
+	if r.tools.createCommits == nil {
+		return invalidToolCall(call, "tool_unavailable", "create_commits is not available.")
+	}
+	if !r.inspectedScope {
+		return invalidToolCall(call, "inspect_before_create_required", "create_commits requires a successful inspect_commit_scope call first.")
+	}
+	input, err := createCommitsInputFromArguments(call.Arguments)
+	if err != nil {
+		return invalidToolCall(call, "invalid_arguments", err.Error())
+	}
+	created, err := r.tools.createCommits(input)
+	if err != nil {
+		return toolFailed(call, err)
+	}
+	return toolSucceeded(call, created)
+}
+
+func (r *ToolCallRuntime) executeRepairFile(call ToolCallRequest) ToolCallResult {
+	if r.tools.repairFile == nil {
+		return invalidToolCall(call, "tool_unavailable", "repair_file is not available.")
+	}
+	path := stringArgument(call.Arguments, "path")
+	if strings.TrimSpace(path) == "" {
+		return invalidToolCall(call, "invalid_arguments", "repair_file requires a non-empty path.")
+	}
+	content := stringArgument(call.Arguments, "content")
+	if strings.TrimSpace(content) == "" {
+		return invalidToolCall(call, "invalid_arguments", "repair_file requires non-empty content.")
+	}
+	if !r.readFiles[path] {
+		return invalidToolCall(call, "read_before_write_required", "repair_file requires a successful read_file call for the same path first.")
+	}
+	if !r.repairAllowed(path) {
+		return invalidToolCall(call, "repair_path_not_allowed", "repair_file can only write eligible conflicted files in Interactive Repair.")
+	}
+	confirmed, err := r.confirmRepairWrite(RepairFileInput{Path: path, Content: content})
+	if err != nil {
+		return toolFailed(call, err)
+	}
+	if !confirmed {
+		return invalidToolCall(call, "repair_confirmation_required", "repair_file requires developer confirmation before applying writes.")
+	}
+	repair, err := r.tools.repairFile(RepairFileInput{Path: path, Content: content})
+	if err != nil {
+		return toolFailed(call, err)
+	}
+	return toolSucceeded(call, repair)
 }
 
 func (r *ToolCallRuntime) confirmRepairWrite(input RepairFileInput) (bool, error) {
@@ -229,6 +253,14 @@ func (r *ToolCallRuntime) repairAllowed(path string) bool {
 		}
 	}
 	return false
+}
+
+func toolSucceeded(call ToolCallRequest, result any) ToolCallResult {
+	return ToolCallResult{CallID: call.ID, Name: call.Name, OK: true, Result: result}
+}
+
+func toolFailed(call ToolCallRequest, err error) ToolCallResult {
+	return ToolCallResult{CallID: call.ID, Name: call.Name, OK: false, Error: &ToolCallError{Code: "tool_failed", Message: err.Error()}}
 }
 
 func invalidToolCall(call ToolCallRequest, code string, message string) ToolCallResult {

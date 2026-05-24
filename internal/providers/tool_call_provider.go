@@ -69,13 +69,13 @@ func (p *httpToolCallProvider) NextToolCalls(results []runtimex.ToolCallResult) 
 		return runtimex.ProviderTurn{}, err
 	}
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		return runtimex.ProviderTurn{}, fmt.Errorf("http %d: %s", response.StatusCode, responseSnippet(body))
+		return runtimex.ProviderTurn{}, fmt.Errorf("provider request failed with http %d", response.StatusCode)
 	}
 	p.captureProviderState(body)
 	p.turnCount++
 	turn, err := p.adapter.ParseTurn(body)
 	if err != nil {
-		return runtimex.ProviderTurn{}, fmt.Errorf("provider response parse error: %v (response body: %s)", err, responseSnippet(body))
+		return runtimex.ProviderTurn{}, fmt.Errorf("provider response parse error: %w", err)
 	}
 	return turn, nil
 }
