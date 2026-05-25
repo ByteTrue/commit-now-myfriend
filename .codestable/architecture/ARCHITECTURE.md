@@ -40,6 +40,8 @@ commit-now-myfriend 是一个 Go-native、本地运行的 AI-assisted Git commit
 
 API keys 默认写入系统 Secret Store，而不是 plaintext config；Secret Store 适配在 `internal/config/secret_store.go`（`internal/config/secret_store.go:12`、`internal/config/secret_store.go:16`、`internal/config/secret_store.go:20`、`internal/config/secret_store.go:37`）。这个边界让 provider credential 的读取和偏好配置分离，也使 `doctor` 能报告 credential source。
 
+Config Panel 的 API key 写入也复用这条边界：provider 变更先进入 effective config，再按**当前 provider 状态**决定 Secret Store slot，避免把密钥写到过期 provider 的 account。这个约束现在由 CLI 层在保存时实时重解析 current provider，而不是使用 panel 打开时的快照。
+
 ### 2.3 Git / Commit Scope / Safety 层
 
 Git 层是本地仓库事实来源：`InspectRepository` 检查仓库状态，`InspectCommitScope` 根据默认 whole-working-tree、`--staged`、pathspec、untracked 策略等构造 Commit Scope（`internal/git/service.go:52`、`internal/git/service.go:131`）。diff/read 预算有固定默认值，避免无限制把仓库内容暴露给 AI（`internal/git/service.go:15`、`internal/git/service.go:16`）。
@@ -63,6 +65,8 @@ Full-screen TUI 位于 `internal/tui`，`ModelInput` 是 CLI/业务层注入 TUI
 ### 2.6 Doctor / Init / Config 辅助流
 
 `internal/commands/init.go:47` 运行 onboarding，`internal/commands/config.go:22` 运行 config 命令，`internal/commands/doctor.go:23` 运行 doctor 命令。Doctor 的核心服务是 `doctor.Run`，输入包含 cwd/env/secret store/provider probe 等依赖（`internal/doctor/service.go:13`、`internal/doctor/service.go:23`）。这些命令通过 CLI runtime 注入共享 config、secret store、provider factory 和 output router，避免辅助流各自重建系统边界。
+
+`cnm auto --tui` 的 conflict handoff 不再是 config gate 的旁路：只要 repair 最终仍依赖 provider，就必须先通过 effective config / required-config 检查；缺 API key、缺 `baseURL`、或 config parse 失败时，命令优先返回 config 问题，而不是进入 Interactive Repair 后再暴露 provider 次生错误。
 
 ### 2.7 输出与 npm/native binary 分发
 

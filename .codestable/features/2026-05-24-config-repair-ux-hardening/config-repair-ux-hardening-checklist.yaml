@@ -21,28 +21,28 @@ steps:
 checks:
   - item: "Config Panel 保存 API key 时以当前 provider 状态而不是 panel 初始快照为准"
     source: 名词契约
-    status: done
+    status: passed
   - item: "Autonomous Commit 的 conflict handoff 必须经过统一 effective config gate"
     source: 编排骨架
-    status: done
+    status: passed
   - item: "配置解析失败 / 必要配置缺失优先于 conflict repair/provider 次生错误对外暴露"
     source: 流程级约束
-    status: done
+    status: passed
   - item: "feature 的挂载点仅限 runConfigPanel、ResolveEffectiveConfig、runAuto、runConflictTUIHandoff 和相关 tests"
     source: 挂载点
-    status: done
+    status: passed
   - item: "不重做 config schema、不新增 provider 能力、不改变 commit transaction / secret blocker 语义、不新增命令面"
     source: 范围守护
-    status: done
+    status: passed
   - item: "先改 provider 再设 key 时，新 provider 被识别为有 key，旧 provider 不会被误写"
     source: 验收场景
-    status: done
+    status: passed
   - item: "`cnm auto --tui` 在 conflict + 缺 API key 时先报 api-key-missing，不进入 repair"
     source: 验收场景
-    status: done
+    status: passed
   - item: "`cnm auto --tui` 在 conflict + openai-compatible 缺 baseURL 时先报 base_url_missing，行为与 normal auto path 一致"
     source: 验收场景
-    status: done
+    status: passed
   - item: "配置完整时，conflict repair happy path 仍可进入 Interactive Repair 并继续 commit handoff"
     source: 验收场景
-    status: done
+    status: passed
