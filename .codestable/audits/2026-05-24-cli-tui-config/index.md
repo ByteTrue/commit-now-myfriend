@@ -3,7 +3,7 @@ doc_type: audit-index
 audit: 2026-05-24-cli-tui-config
 scope: internal/cli, internal/tui, internal/config
 created: 2026-05-24
-status: active
+status: resolved
 total_findings: 3
 ---
 
@@ -17,7 +17,7 @@ total_findings: 3
 
 ## 总评
 
-目标包测试当前通过，但本轮范围内仍有 3 条值得处理的发现：2 条 bug、1 条 maintainability。最优先的是 config panel 对 API key 的写入逻辑会把 key 绑定到“打开 panel 时的 provider”，而不是用户刚在 panel 里切换后的 provider；其次是 `cnm auto --tui` 的 conflict handoff 在配置解析失败时仍会继续走 repair 分支，导致用户拿到次生错误而不是明确的配置错误。
+目标包测试当前通过，本轮范围内发现的 3 条问题已全部修复并完成回归验证：Config Panel 的 API key 保存已按当前 provider 状态解析，`cnm auto --tui` 的 conflict handoff 不再绕过前置 config gate，`runAuto` 也进一步提炼出 helper 降低了分支集中度。
 
 ## 发现清单
 
@@ -38,8 +38,9 @@ total_findings: 3
 | arch-drift | 0 | 0 | 0 | 0 |
 | **合计** | **0** | **2** | **1** | **3** |
 
-## 下一步建议
+## 收尾结论
 
-- **P1 本迭代修**：先走 finding-01，避免用户在 config panel 中误把密钥写入错误 provider 的 Secret Store slot；再走 finding-02，保证 conflict handoff 对配置缺失/解析失败给出确定性错误。
-- **P2 下个迭代修**：finding-03 建议通过 `cs-refactor` 拆解 `runAuto`，把 scope 检查、config gate、TUI handoff、JSON/non-JSON 输出分层。
-- 本次未发现 P0；修复应分别进入 `cs-issue` / `cs-refactor`，不在 `cs-audit` 中顺手改。
+- finding-01 已修复：Config Panel 保存 API key 时按当前 provider 状态解析并写入正确的 Secret Store slot。
+- finding-02 已修复：`cnm auto --tui` 的 conflict handoff 现在会先经过 config gate，再决定是否进入 repair。
+- finding-03 已修复：`runAuto` 已提炼出 config/provider-target helper，降低了本轮问题所暴露的分支耦合。
+- 本次 audit 已闭环；后续如继续收缩 `runAuto`，可另开独立 `cs-refactor`。

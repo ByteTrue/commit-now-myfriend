@@ -6,7 +6,7 @@ nature: bug
 severity: P1
 confidence: medium
 suggested_action: cs-issue
-status: open
+status: resolved
 ---
 
 # Finding 02：`cnm auto --tui` 的 conflict handoff 会绕过前置 config 错误
@@ -34,3 +34,7 @@ status: open
 ## 建议动作
 
 `cs-issue`，因为这是命令调度顺序导致的真实控制流 bug。
+
+## 处理结果
+
+已修复。`runAuto` 现在只在 TUI conflict handoff 分支前做前置 config gate；缺 API key / 缺 `baseURL` 时优先返回 config error，不再进入 repair 产生次生 provider 错误。相关 CLI 回归测试已补齐。

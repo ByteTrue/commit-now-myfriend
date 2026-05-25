@@ -6,7 +6,7 @@ nature: bug
 severity: P1
 confidence: high
 suggested_action: cs-issue
-status: open
+status: resolved
 ---
 
 # Finding 01：config panel 切换 provider 后保存 API key 会写到旧 provider 名下
@@ -34,3 +34,7 @@ API key 保存时不要依赖 panel 打开时的 provider 快照；应在写 key
 ## 建议动作
 
 `cs-issue`，因为这是具体、可复现、影响用户配置正确性的行为缺陷。
+
+## 处理结果
+
+已修复。`internal/cli/runConfigPanel` 的 API key 保存路径现在会实时重解析当前 provider，再写入对应 Secret Store slot；新增 CLI 测试覆盖“先改 provider 再设 key”的场景。

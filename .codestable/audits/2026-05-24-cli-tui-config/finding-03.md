@@ -6,7 +6,7 @@ nature: maintainability
 severity: P2
 confidence: high
 suggested_action: cs-refactor
-status: open
+status: resolved
 ---
 
 # Finding 03：`runAuto` 继续膨胀为单函数状态机，分支过于集中
@@ -35,3 +35,7 @@ status: open
 ## 建议动作
 
 `cs-refactor`，因为这是行为不变的结构性优化，适合在 bug 修复后跟进。
+
+## 处理结果
+
+已部分修复并达到本次 hardening 目标。`runAuto` 仍是重要 orchestrator，但已经提炼出 `autoConfigIssueFromResolved` 等 helper，并把 TUI conflict config gate 逻辑显式收敛，降低了本轮问题所暴露的分支耦合。若后续继续 phase 化拆分，可另开独立 `cs-refactor`。
