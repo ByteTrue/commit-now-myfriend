@@ -1,0 +1,48 @@
+feature: 2026-05-25-windows-installer-wrapper-smoke-coverage
+created: 2026-05-25
+
+steps:
+  - action: "按第 2.5 节方案做轻量微重构：补齐 Windows smoke 所需的 helper / test seam，避免 workflow 直接依赖大量平台 shell 逻辑"
+    exit_signal: "Windows archive naming / checksum / launcher 路径都能被脚本或测试独立验证"
+    status: pending
+  - action: "installer / wrapper smoke 节点：补 Windows 方向 smoke test 或脚本，证明 zip + checksum + `cnm.exe` 路径成立"
+    exit_signal: "本地或 CI 中有可重复的 Windows smoke 通过证据"
+    status: pending
+  - action: "workflow 接入：把 Windows smoke 挂到 CI 或 release workflow 中"
+    exit_signal: "workflow YAML 中出现明确 Windows smoke step，且消费的是 helper / test 输出"
+    status: pending
+  - action: "文档同步：把自动 Windows smoke 现状回写到 distribution / runbook"
+    exit_signal: "docs 与 workflow / script 实际行为一致"
+    status: pending
+
+checks:
+  - item: "Windows archive 名称继续满足 `commit-now-myfriend_<version>_windows_<arch>.zip` 契约"
+    source: 名词契约
+    status: pending
+  - item: "`checksums.txt` 中必须能找到对应 Windows archive 的条目"
+    source: 名词契约
+    status: pending
+  - item: "Windows installer 分支对 zip / checksum / `cnm.exe` 路径有自动 smoke 证据"
+    source: 编排骨架
+    status: pending
+  - item: "workflow 中的 Windows smoke 不依赖真实 `npm publish` 才能验证"
+    source: 流程级约束
+    status: pending
+  - item: "挂载点仅限 CI workflow、release workflow、installer/wrapper scripts、distribution/runbook 文档"
+    source: 挂载点
+    status: pending
+  - item: "不新增 MSI/winget/Scoop，不把 release workflow 扩成大规模跨平台安装实验室"
+    source: 范围守护
+    status: pending
+  - item: "运行 Windows smoke helper / 测试时，`windows_amd64.zip` / `windows_arm64.zip` 与 checksum 条目关系可被验证"
+    source: 验收场景
+    status: pending
+  - item: "Windows 平台分支下，installer 能给出 zip 校验、解压和 `cnm.exe` 定位的通过证据"
+    source: 验收场景
+    status: pending
+  - item: "wrapper 对 Windows binary 路径能给出成功执行或明确失败信息的 smoke 证据"
+    source: 验收场景
+    status: pending
+  - item: "CI / release workflow 中的 Windows smoke 已自动化，不再只是 runbook 里的人工步骤"
+    source: 验收场景
+    status: pending
