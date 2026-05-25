@@ -7,7 +7,7 @@ This document records the current manual release sequence for the Go-native `cnm
 - Version source of truth: `package.json`
 - GoReleaser reads the same semantic version when creating release archives
 - GitHub Releases hosts the native archives consumed by `scripts/npm-install.js`
-- There is currently **no dedicated GitHub Actions release workflow** beyond CI; this runbook is the release checklist
+- GitHub Actions release automation lives in `.github/workflows/release.yml`; this runbook explains the same sequence in human terms and serves as the fallback checklist
 
 ## Release order
 
@@ -51,6 +51,7 @@ This document records the current manual release sequence for the Go-native `cnm
 7. **Publish the npm wrapper after GitHub Release assets exist**
    - `scripts/npm-install.js` downloads by `package.json` version from GitHub Releases
    - Publishing npm before release assets exist will break `postinstall`
+  - The release workflow enforces this ordering by running npm publish only after GitHub Release artifacts are created
 
 8. **Post-publish smoke checks**
    ```bash
@@ -70,6 +71,6 @@ The npm installer currently downloads the matching release archive and extracts 
 
 ## Follow-up candidates
 
-- Add a dedicated GitHub Actions release workflow
+- Extend the release workflow with stronger smoke coverage or environment-specific checks
 - Teach `scripts/npm-install.js` to verify `checksums.txt`
 - Add automated Windows installer smoke coverage

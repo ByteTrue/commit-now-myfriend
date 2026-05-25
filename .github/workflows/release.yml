@@ -1,0 +1,97 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Optional release tag to validate against package.json (for manual runs)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verify tag matches package.json version
+        env:
+          RELEASE_TAG: ${{ github.ref_type == 'tag' && github.ref_name || inputs.tag }}
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          if [ -n "$RELEASE_TAG" ] && [ "$RELEASE_TAG" != "v$PACKAGE_VERSION" ]; then
+            echo "Tag $RELEASE_TAG does not match package.json version v$PACKAGE_VERSION" >&2
+            exit 1
+          fi
+          echo "Validated package version v$PACKAGE_VERSION"
+
+      - name: Go fmt check
+        run: |
+          gofmt -w cmd internal
+          git diff --exit-code
+
+      - name: Go test
+        run: go test ./...
+
+      - name: Go build
+        run: make go-build
+
+      - name: Wrapper smoke checks
+        run: |
+          ./dist/go/cnm --help
+          ./dist/go/cnm doctor --json || true
+          node scripts/cnm.js --help
+          npm pack --dry-run
+
+      - name: GoReleaser release
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-npm:
+    runs-on: ubuntu-latest
+    needs: release-artifacts
+    if: ${{ secrets.NPM_TOKEN != '' }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Verify npm package shape
+        run: npm pack --dry-run
+
+      - name: Publish npm wrapper
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
