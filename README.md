@@ -407,7 +407,7 @@ For a release snapshot:
 make go-release-snapshot
 ```
 
-See `docs/distribution.md` for release packaging details.
+See `docs/distribution.md` for release packaging details and `docs/release-runbook.md` for the current manual publish sequence.
 
 ## Archive branch
 

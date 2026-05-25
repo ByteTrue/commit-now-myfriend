@@ -26,8 +26,8 @@ Generated archives follow this pattern:
 - `commit-now-myfriend_<version>_darwin_arm64.tar.gz`
 - `commit-now-myfriend_<version>_linux_amd64.tar.gz`
 - `commit-now-myfriend_<version>_linux_arm64.tar.gz`
-- `commit-now-myfriend_<version>_windows_amd64.tar.gz`
-- `commit-now-myfriend_<version>_windows_arm64.tar.gz`
+- `commit-now-myfriend_<version>_windows_amd64.zip`
+- `commit-now-myfriend_<version>_windows_arm64.zip`
 
 A `checksums.txt` file is emitted alongside the archives.
 
@@ -50,6 +50,8 @@ Run a full release snapshot with GoReleaser:
 ```bash
 make go-release-snapshot
 ```
+
+For the current manual publish sequence, see `docs/release-runbook.md`.
 
 ## npm wrapper layout
 
@@ -76,6 +78,12 @@ These can be overridden for testing with:
 - `CNM_RELEASE_OWNER`
 - `CNM_RELEASE_REPO`
 - `CNM_RELEASE_BASE_URL`
+
+## Trust model
+
+> Current state: `scripts/npm-install.js` downloads the matching GitHub Release archive and extracts `cnm`, but it does **not** verify `checksums.txt` yet.
+
+That means release hardening currently depends on correct asset naming, GitHub-hosted transport, and post-publish smoke checks. Checksum verification remains a follow-up item rather than a current guarantee.
 
 ## Notes
 
