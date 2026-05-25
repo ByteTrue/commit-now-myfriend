@@ -52,6 +52,9 @@ jobs:
       - name: Test suite
         run: npm test
 
+      - name: Windows smoke coverage
+        run: npm run test:windows-smoke
+
       - name: Go build
         run: make go-build
 
@@ -61,6 +64,9 @@ jobs:
           ./dist/go/cnm doctor --json || true
           node scripts/cnm.js --help
           npm pack --dry-run
+
+      - name: Explicit Windows smoke evidence
+        run: npm run test:windows-smoke
 
       - name: GoReleaser release
         uses: goreleaser/goreleaser-action@v6

@@ -24,6 +24,7 @@
     "test": "npm run test:go && npm run test:node",
     "test:go": "make go-test",
     "test:node": "node --test scripts/*.test.js",
+    "test:windows-smoke": "node --test scripts/windows-smoke.test.js",
     "fmt": "make go-fmt",
     "fmt:go": "make go-fmt",
     "dev": "make go-run",

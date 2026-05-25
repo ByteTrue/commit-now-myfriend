@@ -61,9 +61,9 @@ The npm package now includes:
 - `scripts/npm-install.js` — postinstall downloader for the matching platform binary
 - `bin/` — destination for the installed native binary
 
-At install time, `postinstall` downloads the archive matching the host platform and extracts `cnm` into `bin/`.
+At install time, `postinstall` downloads the archive matching the host platform, verifies it against `checksums.txt`, and extracts `cnm` into `bin`.
 
-The launcher script fails fast with a helpful message if the binary was not downloaded successfully.
+The launcher script fails fast with a helpful message if the binary was not downloaded successfully. CI and the release workflow now run explicit Windows smoke coverage in addition to the generic Node installer tests.
 
 ## Release assumptions
 

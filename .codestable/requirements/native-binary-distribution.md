@@ -3,9 +3,10 @@ doc_type: requirement
 slug: native-binary-distribution
 pitch: 用 npm 安装入口交付 Go 原生 cnm，让不同平台的用户都能直接运行
 status: current
-last_reviewed: 2026-05-24
+last_reviewed: 2026-05-26
 implemented_by:
   - architecture-overview
+  - 2026-05-25-windows-installer-wrapper-smoke-coverage
 tags: [distribution, npm, go, binary]
 ---
 
@@ -24,7 +25,7 @@ tags: [distribution, npm, go, binary]
 
 ## 怎么解决
 
-项目发布 Go 原生二进制，并保留 npm 包作为下载和启动 wrapper。安装时 npm wrapper 获取当前平台对应的 release binary；运行时 `cnm` 只是把参数转交给 native binary。本地开发和发布前提供打包演练，确保 wrapper、binary 路径和 release artifact 对得上。
+项目发布 Go 原生二进制，并保留 npm 包作为下载和启动 wrapper。安装时 npm wrapper 获取当前平台对应的 release binary、校验 `checksums.txt`，再把 archive 解包为本地可执行文件；运行时 `cnm` 只是把参数转交给 native binary。本地开发和发布前提供打包演练，并在 CI / release workflow 中补 Windows smoke coverage，确保 wrapper、binary 路径和 release artifact 对得上。
 
 ## 边界
 

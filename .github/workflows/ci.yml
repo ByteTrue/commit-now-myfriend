@@ -24,6 +24,9 @@ jobs:
       - name: Test suite
         run: npm test
 
+      - name: Windows smoke coverage
+        run: npm run test:windows-smoke
+
       - name: Go build
         run: make go-build
 

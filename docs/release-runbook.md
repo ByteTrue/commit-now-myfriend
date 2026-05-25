@@ -67,10 +67,10 @@ The npm installer now downloads the matching release archive, verifies it agains
 
 - correct GitHub Release asset naming
 - transport integrity from GitHub Releases
-- manual release smoke checks after publish
+- manual release smoke checks after publish for edge cases not covered by CI
 
 ## Follow-up candidates
 
 - Extend the release workflow with stronger smoke coverage or environment-specific checks
-- Continue improving installer and wrapper smoke coverage, especially on Windows
-- Add automated Windows installer smoke coverage
+- Continue improving installer and wrapper smoke coverage beyond the current Windows contract checks
+- Add real Windows runner coverage if we later need platform-native end-to-end release evidence
