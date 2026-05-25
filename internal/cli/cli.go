@@ -372,7 +372,10 @@ func runConfigPanel(runtime Runtime) int {
 				return err
 			}
 			if key == config.ConfigKeyAPIKey && runtime.SecretStore != nil {
-				provider := resolved.Values.Provider
+				provider, err := currentConfigPanelProvider(runtime)
+				if err != nil {
+					return err
+				}
 				if patch.APIKey != nil {
 					if err := runtime.SecretStore.SetAPIKey(provider, *patch.APIKey); err != nil {
 						return err
@@ -409,6 +412,25 @@ func runConfigPanel(runtime Runtime) int {
 		return int(output.Error)
 	}
 	return int(output.Success)
+}
+
+func currentConfigPanelProvider(runtime Runtime) (config.ProviderType, error) {
+	resolved, err := config.ResolveEffectiveConfig(config.ResolveConfigOptions{
+		CWD:         runtime.CWD,
+		Env:         runtime.Env,
+		SecretStore: runtime.SecretStore,
+	})
+	if err != nil {
+		return "", err
+	}
+	return resolved.Values.Provider, nil
+}
+
+func autoConfigIssueFromResolved(configErr error, values config.EffectiveConfig) *autoConfigIssue {
+	if configErr != nil {
+		return &autoConfigIssue{Code: "config_error", Message: configErr.Error()}
+	}
+	return autoRequiredConfigIssue(values)
 }
 
 func runAuto(args []string, runtime Runtime) int {
@@ -481,6 +503,9 @@ func runAuto(args []string, runtime Runtime) int {
 	if scopeHasConflict(scope) {
 		message := "Conflicts are present; cnm auto cannot repair or commit conflicts non-interactively."
 		if parsed.TUI {
+			if issue := autoConfigIssueFromResolved(configErr, resolvedConfig.Values); issue != nil {
+				return writeAutoConfigMissing(runtime, parsed, scope, *issue)
+			}
 			return runConflictTUIHandoff(runtime, scope, parsed, resolvedConfig.Values, message)
 		}
 		if parsed.JSON {
@@ -518,10 +543,7 @@ func runAuto(args []string, runtime Runtime) int {
 		}
 		return int(output.Error)
 	}
-	if configErr != nil {
-		return writeAutoConfigMissing(runtime, parsed, scope, autoConfigIssue{Code: "config_error", Message: configErr.Error()})
-	}
-	if issue := autoRequiredConfigIssue(resolvedConfig.Values); issue != nil {
+	if issue := autoConfigIssueFromResolved(configErr, resolvedConfig.Values); issue != nil {
 		return writeAutoConfigMissing(runtime, parsed, scope, *issue)
 	}
 	if parsed.DryRun {

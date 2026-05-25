@@ -1921,7 +1921,7 @@ func TestExecuteWithRuntimeAutoTUIHandsOffConflictsToInteractiveRepairContext(t 
 	tuiCalled := false
 	exitCode := ExecuteWithRuntime([]string{"auto", "--tui"}, Runtime{
 		CWD:    temp,
-		Env:    map[string]string{"CNM_HOME": filepath.Join(temp, ".cnm-home")},
+		Env:    configuredCLITestEnv(filepath.Join(temp, ".cnm-home")),
 		Stdout: &stdout,
 		Stderr: &stderr,
 		Stdin:  strings.NewReader(""),
@@ -3153,4 +3153,172 @@ func containsString(values []string, target string) bool {
 		}
 	}
 	return false
+}
+
+func TestExecuteWithRuntimeAutoTUIConflictChecksConfigBeforeHandoffWhenAPIKeyMissing(t *testing.T) {
+	temp := t.TempDir()
+	runGitForCLITest(t, temp, "init")
+	runGitForCLITest(t, temp, "config", "user.name", "CNM Test")
+	runGitForCLITest(t, temp, "config", "user.email", "cnm@example.test")
+	if err := os.WriteFile(filepath.Join(temp, "conflict.txt"), []byte("base\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	runGitForCLITest(t, temp, "add", "conflict.txt")
+	runGitForCLITest(t, temp, "commit", "-m", "chore: base")
+	initialBranch := strings.TrimSpace(runGitOutputForCLITest(t, temp, "branch", "--show-current"))
+	runGitForCLITest(t, temp, "checkout", "-b", "other")
+	if err := os.WriteFile(filepath.Join(temp, "conflict.txt"), []byte("other\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	runGitForCLITest(t, temp, "commit", "-am", "chore: other")
+	runGitForCLITest(t, temp, "checkout", initialBranch)
+	if err := os.WriteFile(filepath.Join(temp, "conflict.txt"), []byte("main\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	runGitForCLITest(t, temp, "commit", "-am", "chore: main")
+	merge := exec.Command("git", "merge", "other")
+	merge.Dir = temp
+	_ = merge.Run()
+	headBefore := strings.TrimSpace(runGitOutputForCLITest(t, temp, "rev-parse", "HEAD"))
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	tuiCalled := false
+	exitCode := ExecuteWithRuntime([]string{"auto", "--tui"}, Runtime{
+		CWD:    temp,
+		Env:    map[string]string{"CNM_HOME": filepath.Join(temp, ".cnm-home")},
+		Stdout: &stdout,
+		Stderr: &stderr,
+		Stdin:  strings.NewReader(""),
+		IsTTY:  true,
+		TUIRunner: func(input tui.ModelInput, runtime tui.Runtime) (tui.Result, error) {
+			tuiCalled = true
+			return tui.Result{Cancelled: true}, nil
+		},
+	})
+
+	if exitCode != 1 {
+		t.Fatalf("expected config gate failure exit, got %d stdout=%q stderr=%q", exitCode, stdout.String(), stderr.String())
+	}
+	if tuiCalled {
+		t.Fatalf("expected config gate to prevent TUI handoff")
+	}
+	if !strings.Contains(stderr.String(), "No API key is configured") {
+		t.Fatalf("expected api key config error, got %q", stderr.String())
+	}
+	if headAfter := strings.TrimSpace(runGitOutputForCLITest(t, temp, "rev-parse", "HEAD")); headAfter != headBefore {
+		t.Fatalf("config gate path should not create commit: %s -> %s", headBefore, headAfter)
+	}
+}
+
+func TestExecuteWithRuntimeAutoTUIConflictChecksConfigBeforeHandoffWhenBaseURLMissing(t *testing.T) {
+	temp := t.TempDir()
+	home := filepath.Join(temp, ".cnm-home")
+	runGitForCLITest(t, temp, "init")
+	runGitForCLITest(t, temp, "config", "user.name", "CNM Test")
+	runGitForCLITest(t, temp, "config", "user.email", "cnm@example.test")
+	if err := os.MkdirAll(home, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(home, "config.json"), []byte("{\n  \"provider\": \"openai-compatible\",\n  \"model\": \"compat-model\"\n}\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(temp, "conflict.txt"), []byte("base\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	runGitForCLITest(t, temp, "add", "conflict.txt")
+	runGitForCLITest(t, temp, "commit", "-m", "chore: base")
+	initialBranch := strings.TrimSpace(runGitOutputForCLITest(t, temp, "branch", "--show-current"))
+	runGitForCLITest(t, temp, "checkout", "-b", "other")
+	if err := os.WriteFile(filepath.Join(temp, "conflict.txt"), []byte("other\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	runGitForCLITest(t, temp, "commit", "-am", "chore: other")
+	runGitForCLITest(t, temp, "checkout", initialBranch)
+	if err := os.WriteFile(filepath.Join(temp, "conflict.txt"), []byte("main\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	runGitForCLITest(t, temp, "commit", "-am", "chore: main")
+	merge := exec.Command("git", "merge", "other")
+	merge.Dir = temp
+	_ = merge.Run()
+	headBefore := strings.TrimSpace(runGitOutputForCLITest(t, temp, "rev-parse", "HEAD"))
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	tuiCalled := false
+	secretStore := &cliWritableSecretStore{keys: map[string]string{"openai-compatible": "test_store_value_1234567890"}}
+	exitCode := ExecuteWithRuntime([]string{"auto", "--tui"}, Runtime{
+		CWD:         temp,
+		Env:         map[string]string{"CNM_HOME": home},
+		Stdout:      &stdout,
+		Stderr:      &stderr,
+		Stdin:       strings.NewReader(""),
+		IsTTY:       true,
+		SecretStore: secretStore,
+		TUIRunner: func(input tui.ModelInput, runtime tui.Runtime) (tui.Result, error) {
+			tuiCalled = true
+			return tui.Result{Cancelled: true}, nil
+		},
+	})
+
+	if exitCode != 1 {
+		t.Fatalf("expected config gate failure exit, got %d stdout=%q stderr=%q", exitCode, stdout.String(), stderr.String())
+	}
+	if tuiCalled {
+		t.Fatalf("expected config gate to prevent TUI handoff")
+	}
+	if !strings.Contains(stderr.String(), "requires baseURL") {
+		t.Fatalf("expected baseURL config error, got %q", stderr.String())
+	}
+	if headAfter := strings.TrimSpace(runGitOutputForCLITest(t, temp, "rev-parse", "HEAD")); headAfter != headBefore {
+		t.Fatalf("config gate path should not create commit: %s -> %s", headBefore, headAfter)
+	}
+}
+
+func TestExecuteWithRuntimeConfigPanelStoresAPIKeyForUpdatedProvider(t *testing.T) {
+	temp := t.TempDir()
+	home := filepath.Join(temp, ".cnm-home")
+	secretStore := &cliWritableSecretStore{}
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	exitCode := ExecuteWithRuntime([]string{"config"}, Runtime{
+		CWD:         temp,
+		Env:         map[string]string{"CNM_HOME": home},
+		Stdout:      &stdout,
+		Stderr:      &stderr,
+		Stdin:       strings.NewReader(""),
+		IsTTY:       true,
+		SecretStore: secretStore,
+		ConfigPanelRunner: func(input tui.ConfigPanelInput, runtime tui.Runtime) (tui.ConfigPanelResult, error) {
+			if err := input.WriteValue(config.ConfigKeyProvider, "anthropic-messages"); err != nil {
+				return tui.ConfigPanelResult{}, err
+			}
+			if _, _, err := input.Reload(); err != nil {
+				return tui.ConfigPanelResult{}, err
+			}
+			if err := input.WriteValue(config.ConfigKeyAPIKey, "test_panel_value_1234567890"); err != nil {
+				return tui.ConfigPanelResult{}, err
+			}
+			return tui.ConfigPanelResult{Saved: 2}, nil
+		},
+	})
+
+	if exitCode != 0 {
+		t.Fatalf("expected config panel success, got %d stdout=%q stderr=%q", exitCode, stdout.String(), stderr.String())
+	}
+	if secretStore.keys["anthropic-messages"] != "test_panel_value_1234567890" {
+		t.Fatalf("expected api key in updated provider slot, got %+v", secretStore.keys)
+	}
+	if _, ok := secretStore.keys["openai-responses"]; ok {
+		t.Fatalf("did not expect api key in stale provider slot: %+v", secretStore.keys)
+	}
+	loaded, err := os.ReadFile(filepath.Join(home, "config.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(loaded), "anthropic-messages") {
+		t.Fatalf("expected updated provider in user config: %s", string(loaded))
+	}
 }
