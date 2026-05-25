@@ -6,7 +6,7 @@ nature: security
 severity: P1
 confidence: medium
 suggested_action: cs-issue
-status: open
+status: resolved
 ---
 
 # Finding 01：Provider 错误响应片段可能泄露敏感内容
@@ -34,3 +34,7 @@ Provider HTTP 错误和响应解析失败会把响应 body 的前 500 个字符�
 ## 建议动作
 
 `cs-issue`，因为这是安全边界上的具体行为缺陷，需要先写复现和期望输出，再补测试修复。
+
+## 处理结果
+
+已修复。`internal/providers/tool_call_provider.go` 与 `internal/providers/helpers.go` 的 provider 错误路径已移除 `responseSnippet(...)` 暴露；错误输出改为低敏状态信息和结构化 parse error。相关包测试已通过。

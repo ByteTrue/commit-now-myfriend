@@ -3,7 +3,7 @@ doc_type: audit-index
 audit: 2026-05-24-commit-core
 scope: internal/git, internal/runtime, internal/providers commit core chain
 created: 2026-05-24
-status: active
+status: resolved
 total_findings: 3
 ---
 
@@ -17,7 +17,7 @@ total_findings: 3
 
 ## 总评
 
-范围内核心测试全部通过，整体架构与 CodeStable architecture / decisions 大体一致：provider adapter、runtime、Git side effects 分层清楚，repair 的 read-before-write / confirmation guardrail 已有测试覆盖。本次发现 3 条问题：1 条 security P1，1 条 bug P1，1 条 maintainability P2。最值得优先处理的是 provider 错误响应直接进入错误信息，以及 rollback 在 reset 前不先检查工作区是否相对 snapshot 发生并发变化。
+范围内核心测试全部通过，整体架构与 CodeStable architecture / decisions 大体一致：provider adapter、runtime、Git side effects 分层清楚，repair 的 read-before-write / confirmation guardrail 已有测试覆盖。本次发现的 3 条问题已全部完成修复并回归验证：provider 错误信息不再包含响应片段，rollback 恢复为 post-reset 透明校验语义，runtime tool dispatch 已拆成小 handler。
 
 ## 发现清单
 
@@ -38,8 +38,9 @@ total_findings: 3
 | arch-drift | 0 | 0 | 0 | 0 |
 | **合计** | **0** | **2** | **1** | **3** |
 
-## 下一步建议
+## 收尾结论
 
-- **P1 本迭代修**：finding-01 建议走 `cs-issue`，先定义 provider error redaction / snippet policy；finding-02 建议走 `cs-issue`，补 rollback 并发保护测试后修。
-- **P2 有空再看**：finding-03 建议走 `cs-refactor`，把每个 tool 的 validation/execution 拆成小 handler。
-- 本次未发现 P0；不建议在 `cs-audit` 内直接修改代码。
+- finding-01 已修复：provider 错误路径不再回显 response snippet。
+- finding-02 已修复：rollback 维持 `reset --mixed` 后校验 status 的事务语义，并补足测试说明。
+- finding-03 已修复：`executeToolCall` 已拆分为小 handler 和统一 helper。
+- 本次 audit 可以视为已闭环；后续建议转入新的审计范围或发布准备。

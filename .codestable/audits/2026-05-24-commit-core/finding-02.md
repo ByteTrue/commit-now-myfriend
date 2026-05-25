@@ -6,7 +6,7 @@ nature: bug
 severity: P1
 confidence: medium
 suggested_action: cs-issue
-status: open
+status: resolved
 ---
 
 # Finding 02：rollback 在 reset 前没有先检查并发工作区变化
@@ -36,3 +36,7 @@ rollback 前先读取当前 porcelain status，与 snapshot status 比较；如�
 ## 建议动作
 
 `cs-issue`，因为这是事务回滚行为与安全语义不一致的具体 bug 风险。
+
+## 处理结果
+
+已修复并澄清语义。最终方案没有采用“reset 前拒绝回滚”的 pre-check，而是保留 `git reset --mixed` 后校验 status 的事务语义：这样既能正确回滚部分成功的多提交事务，又会通过 `rolled_back_with_status_change` 透明报告工作区差异。CLI 与 git tests 已回归通过。

@@ -6,7 +6,7 @@ nature: maintainability
 severity: P2
 confidence: high
 suggested_action: cs-refactor
-status: open
+status: resolved
 ---
 
 # Finding 03：runtime tool dispatch 函数过长且分支集中
@@ -35,3 +35,7 @@ status: open
 ## 建议动作
 
 `cs-refactor`，因为这是行为不变的结构优化，适合先设计低风险拆分再改。
+
+## 处理结果
+
+已修复。`internal/runtime/runtime.go` 中的 `executeToolCall` 已拆分为按 tool 划分的小 handler，并提炼出统一的 `toolSucceeded` / `toolFailed` helper，降低了后续扩展时遗漏 guardrail 的风险。runtime tests 已通过。
