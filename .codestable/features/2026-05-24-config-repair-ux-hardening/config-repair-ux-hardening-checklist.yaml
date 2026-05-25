@@ -1,0 +1,48 @@
+feature: 2026-05-24-config-repair-ux-hardening
+created: 2026-05-24
+
+steps:
+  - action: "按第 2.5 节方案做轻量微重构：抽出 auto config gate / conflict gate / provider-target helper，保持行为不变"
+    exit_signal: "新增 helper 接入后相关 CLI/config tests 继续通过，现有输出语义不变"
+    status: pending
+  - action: "编排骨架：把 `runAuto` 的 conflict handoff 收敛到统一 config gate 之后"
+    exit_signal: "conflict + missing config 的路径稳定返回 config error，不再落入 repair/provider 次生错误"
+    status: pending
+  - action: "配置写入节点：让 Config Panel 保存 API key 时按当前 provider 状态决定 Secret Store slot"
+    exit_signal: "先改 provider 再设 key 的场景把 key 写入新 provider slot，旧 provider slot 不被误写"
+    status: pending
+  - action: "输出与错误语义：统一 conflict / non-conflict auto path 的 config-missing 与 config-error 表达"
+    exit_signal: "JSON 和 human output 对缺 key / 缺 baseURL / config parse error 的错误优先级一致"
+    status: pending
+  - action: "测试覆盖：补 CLI/config/TUI 交叉回归场景并验证 happy path 不回归"
+    exit_signal: "新增回归测试通过，`go test ./internal/cli ./internal/config ./internal/tui` 全绿"
+    status: pending
+
+checks:
+  - item: "Config Panel 保存 API key 时以当前 provider 状态而不是 panel 初始快照为准"
+    source: 名词契约
+    status: pending
+  - item: "Autonomous Commit 的 conflict handoff 必须经过统一 effective config gate"
+    source: 编排骨架
+    status: pending
+  - item: "配置解析失败 / 必要配置缺失优先于 conflict repair/provider 次生错误对外暴露"
+    source: 流程级约束
+    status: pending
+  - item: "feature 的挂载点仅限 runConfigPanel、ResolveEffectiveConfig、runAuto、runConflictTUIHandoff 和相关 tests"
+    source: 挂载点
+    status: pending
+  - item: "不重做 config schema、不新增 provider 能力、不改变 commit transaction / secret blocker 语义、不新增命令面"
+    source: 范围守护
+    status: pending
+  - item: "先改 provider 再设 key 时，新 provider 被识别为有 key，旧 provider 不会被误写"
+    source: 验收场景
+    status: pending
+  - item: "`cnm auto --tui` 在 conflict + 缺 API key 时先报 api-key-missing，不进入 repair"
+    source: 验收场景
+    status: pending
+  - item: "`cnm auto --tui` 在 conflict + openai-compatible 缺 baseURL 时先报 base_url_missing，行为与 normal auto path 一致"
+    source: 验收场景
+    status: pending
+  - item: "配置完整时，conflict repair happy path 仍可进入 Interactive Repair 并继续 commit handoff"
+    source: 验收场景
+    status: pending

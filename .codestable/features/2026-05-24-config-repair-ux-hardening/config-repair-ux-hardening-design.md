@@ -1,7 +1,7 @@
 ---
 doc_type: feature-design
 feature: 2026-05-24-config-repair-ux-hardening
-status: draft
+status: approved
 summary: 让 config panel 和 conflict repair handoff 在 provider / config gate 上表现为确定性、可解释的用户体验
 tags: [config, repair, ux, cli, tui]
 ---
