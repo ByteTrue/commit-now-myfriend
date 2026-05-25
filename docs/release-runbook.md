@@ -63,7 +63,7 @@ This document records the current manual release sequence for the Go-native `cnm
 
 ## Trust model / known gap
 
-The npm installer currently downloads the matching release archive and extracts the binary, but it **does not yet verify `checksums.txt`**. Until checksum verification is implemented, release hardening depends on:
+The npm installer now downloads the matching release archive, verifies it against `checksums.txt`, and then extracts the binary. Release hardening still depends on:
 
 - correct GitHub Release asset naming
 - transport integrity from GitHub Releases
@@ -72,5 +72,5 @@ The npm installer currently downloads the matching release archive and extracts 
 ## Follow-up candidates
 
 - Extend the release workflow with stronger smoke coverage or environment-specific checks
-- Teach `scripts/npm-install.js` to verify `checksums.txt`
+- Continue improving installer and wrapper smoke coverage, especially on Windows
 - Add automated Windows installer smoke coverage

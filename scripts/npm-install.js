@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict';
+
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -8,6 +8,7 @@ const https = require('node:https');
 const { spawnSync } = require('node:child_process');
 
 const pkg = require('../package.json');
+const { archiveNameFor, verifyFileChecksum, parseChecksums } = require('./npm-install-lib');
 const version = pkg.version;
 const owner = process.env.CNM_RELEASE_OWNER || 'ByteTrue';
 const repo = process.env.CNM_RELEASE_REPO || 'commit-now-myfriend';
@@ -15,7 +16,6 @@ const baseUrl = process.env.CNM_RELEASE_BASE_URL || `https://github.com/${owner}
 const binDir = path.join(__dirname, '..', 'bin');
 const targetName = process.platform === 'win32' ? 'cnm.exe' : 'cnm';
 const targetPath = path.join(binDir, targetName);
-
 function platformName() {
   switch (process.platform) {
     case 'darwin': return 'darwin';
@@ -33,9 +33,6 @@ function archName() {
   }
 }
 
-function archiveExt(osName) {
-  return osName === 'windows' ? 'zip' : 'tar.gz';
-}
 
 function download(url, destination) {
   return new Promise((resolve, reject) => {
@@ -100,14 +97,18 @@ async function main() {
   }
 
   fs.mkdirSync(binDir, { recursive: true });
-  const ext = archiveExt(osName);
-  const archiveName = `commit-now-myfriend_${version}_${osName}_${arch}.${ext}`;
+  const archiveName = archiveNameFor(version, osName, arch);
   const archivePath = path.join(os.tmpdir(), archiveName);
+  const checksumsPath = path.join(os.tmpdir(), `checksums-${version}.txt`);
   const extractDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cnm-install-'));
   const url = `${baseUrl}/${archiveName}`;
+  const checksumsUrl = `${baseUrl}/checksums.txt`;
 
   console.log(`[cnm] Downloading ${url}`);
   await download(url, archivePath);
+  console.log(`[cnm] Downloading ${checksumsUrl}`);
+  await download(checksumsUrl, checksumsPath);
+  verifyFileChecksum(archivePath, archiveName, parseChecksums(fs.readFileSync(checksumsPath, 'utf8')));
   extract(archivePath, extractDir, osName);
 
   const binary = findBinary(extractDir, targetName);

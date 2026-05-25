@@ -21,8 +21,8 @@ jobs:
           gofmt -w cmd internal
           git diff --exit-code
 
-      - name: Go test
-        run: go test ./...
+      - name: Test suite
+        run: npm test
 
       - name: Go build
         run: make go-build

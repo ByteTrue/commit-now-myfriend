@@ -81,9 +81,9 @@ These can be overridden for testing with:
 
 ## Trust model
 
-> Current state: `scripts/npm-install.js` downloads the matching GitHub Release archive and extracts `cnm`, but it does **not** verify `checksums.txt` yet.
+> Current state: `scripts/npm-install.js` downloads the matching GitHub Release archive, verifies it against `checksums.txt`, and then extracts `cnm`.
 
-That means release hardening currently depends on correct asset naming, GitHub-hosted transport, and post-publish smoke checks. Checksum verification remains a follow-up item rather than a current guarantee.
+That means release hardening now guarantees the downloaded archive matches the published checksum before installation. Remaining trust still depends on correct GitHub Release asset naming and post-publish smoke checks.
 
 ## Notes
 
