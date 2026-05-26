@@ -6,7 +6,7 @@ nature: maintainability
 severity: P2
 confidence: high
 suggested_action: cs-refactor
-status: open
+status: resolved
 ---
 
 # Finding 03：CI / release workflow 已重复执行 Windows smoke，验证入口开始分叉
@@ -35,3 +35,7 @@ status: open
 ## 建议动作
 
 `cs-refactor`，因为这是行为不变的验证结构整理问题。
+
+## 处理结果
+
+已修复。`npm test` 现在只跑 Go tests + installer core Node tests，Windows smoke 保留为独立的 `test:windows-smoke` 入口；CI 和 release workflow 也改成显式调用单一 Windows smoke step，不再出现 `npm test` + 两次额外重复调用的结构分叉。

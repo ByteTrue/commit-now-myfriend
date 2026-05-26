@@ -17,7 +17,7 @@ total_findings: 3
 
 ## 总评
 
-最近几轮 hardening 已经把 release 链从“主要靠文档和人工步骤”推进到了“有 workflow、有 checksum verification、有 Windows contract smoke”的状态，方向正确。当前 3 条发现里，installer 临时文件隔离问题已修复；剩余缺口主要在 Windows 真机执行证据不足，以及 workflow 对 Windows smoke 的调用开始重复，后续继续加验证时容易变成双份维护。
+最近几轮 hardening 已经把 release 链从“主要靠文档和人工步骤”推进到了“有 workflow、有 checksum verification、有 Windows contract smoke”的状态，方向正确。当前 3 条发现里，installer 临时文件隔离问题和 Windows smoke 重复调用问题都已修复；剩余主要缺口是 Windows 真机执行证据不足。
 
 ## 发现清单
 
@@ -25,7 +25,7 @@ total_findings: 3
 |---|---|---|---|---|---|
 | 1 | bug | P1 | medium | Windows smoke 仍停留在 Linux 上的契约模拟，没有真实 `cnm.exe` 启动证据 | [finding-01.md](finding-01.md) |
 | 2 | bug | P2 | medium | npm installer 的 archive / checksums 临时文件名按版本固定，缺少并发隔离 | [finding-02.md](finding-02.md) · 已修复 |
-| 3 | maintainability | P2 | high | CI / release workflow 已重复执行 Windows smoke，验证入口开始分叉 | [finding-03.md](finding-03.md) |
+| 3 | maintainability | P2 | high | CI / release workflow 已重复执行 Windows smoke，验证入口开始分叉 | [finding-03.md](finding-03.md) · 已修复 |
 
 ## 按维度分布
 
@@ -41,5 +41,5 @@ total_findings: 3
 ## 下一步建议
 
 - **P1 本迭代修**：如果你决定重新关注 Windows 平台，优先处理 finding-01，补真实 Windows 执行证据或把 contract smoke 明确降级为模拟验证。
-- **P2 跟进修**：finding-03 建议走 `cs-refactor` 收敛 workflow 的 smoke 入口。
-- finding-02 已完成，可从后续交付质量清单中移除。
+- finding-02 和 finding-03 已完成，可从后续交付质量清单中移除。
+- 本次审计当前剩余的高价值动作，已经收敛到 release 验证可信度本身。
