@@ -1,6 +1,6 @@
 {
   "name": "commit-now-myfriend",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "AI-assisted Git commit workflow CLI.",
   "license": "MIT",
   "bin": {
