@@ -103,6 +103,18 @@ function resolveWrapperBinaryPath({
 	return null;
 }
 
+function createInstallerSessionPaths(tmpRoot, archiveName, version) {
+	const sessionRoot = fs.mkdtempSync(path.join(tmpRoot, "cnm-install-"));
+	const extractDir = path.join(sessionRoot, "extract");
+	fs.mkdirSync(extractDir, { recursive: true });
+	return {
+		sessionRoot,
+		archivePath: path.join(sessionRoot, archiveName),
+		checksumsPath: path.join(sessionRoot, `checksums-${version}.txt`),
+		extractDir,
+	};
+}
+
 module.exports = {
 	archiveExt,
 	archiveNameFor,
@@ -114,4 +126,5 @@ module.exports = {
 	verifyFileChecksum,
 	findBinary,
 	resolveWrapperBinaryPath,
+	createInstallerSessionPaths,
 };

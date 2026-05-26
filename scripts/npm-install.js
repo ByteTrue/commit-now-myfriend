@@ -10,6 +10,7 @@ const pkg = require("../package.json");
 const {
 	archiveNameFor,
 	archName,
+	createInstallerSessionPaths,
 	findBinary,
 	parseChecksums,
 	platformName,
@@ -99,9 +100,8 @@ async function main() {
 	fs.mkdirSync(binDir, { recursive: true });
 	const archiveName = archiveNameFor(version, osName, arch);
 	const tmpRoot = process.env.CNM_INSTALL_TMP_DIR || os.tmpdir();
-	const archivePath = path.join(tmpRoot, archiveName);
-	const checksumsPath = path.join(tmpRoot, `checksums-${version}.txt`);
-	const extractDir = fs.mkdtempSync(path.join(tmpRoot, "cnm-install-"));
+	const { archivePath, checksumsPath, extractDir } =
+		createInstallerSessionPaths(tmpRoot, archiveName, version);
 	const url = `${baseUrl}/${archiveName}`;
 	const checksumsUrl = `${baseUrl}/checksums.txt`;
 
