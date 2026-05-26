@@ -18,14 +18,11 @@ jobs:
   release-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Check out release ref
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Check out requested release tag
-        if: ${{ inputs.tag != '' }}
-        run: git checkout "${{ inputs.tag }}"
+          ref: ${{ inputs.tag != '' && inputs.tag || github.ref }}
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -87,12 +84,11 @@ jobs:
     env:
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
-      - name: Check out repository
+      - name: Check out release ref
         uses: actions/checkout@v4
-
-      - name: Check out requested release tag
-        if: ${{ inputs.tag != '' }}
-        run: git checkout "${{ inputs.tag }}"
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.tag != '' && inputs.tag || github.ref }}
 
       - name: Set up Node
         uses: actions/setup-node@v4
