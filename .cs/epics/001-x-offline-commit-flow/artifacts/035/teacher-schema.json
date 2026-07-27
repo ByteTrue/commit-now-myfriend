@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "scope", "subject", "body", "subject_evidence", "body_evidence"],
+  "properties": {
+    "type": {
+      "anyOf": [
+        {"type": "string", "enum": ["build", "chore", "ci", "docs", "feat", "fix", "perf", "refactor", "revert", "style", "test"]},
+        {"type": "null"}
+      ]
+    },
+    "scope": {"anyOf": [{"type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]{0,31}$"}, {"type": "null"}]},
+    "subject": {"type": "string", "minLength": 1, "maxLength": 72},
+    "body": {"type": "string", "maxLength": 1200},
+    "subject_evidence": {"type": "array", "minItems": 1, "maxItems": 3, "items": {"type": "string", "minLength": 1, "maxLength": 240}},
+    "body_evidence": {"type": "array", "maxItems": 6, "items": {"type": "string", "minLength": 1, "maxLength": 240}}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "checks": {
+    "pilot_hash_matches": true,
+    "over_limit_hash_matches": true,
+    "all_inference_cases_within_limit": true,
+    "near_limit_case_present": true,
+    "one_over_limit_case_declared": true,
+    "over_limit_case_not_in_inference_set": true
+  },
+  "pilot_token_max": 8182,
+  "over_limit_tokens": 16011
+}

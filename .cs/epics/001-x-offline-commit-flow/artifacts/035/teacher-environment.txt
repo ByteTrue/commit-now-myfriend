@@ -1,0 +1,11 @@
+cnm #35 frozen teacher tooling environment
+
+Python: 3.12.13
+Resolver/runner: uv 0.11.14 (3fdfdc7d4)
+Direct requirements: requirements.in
+Full 31-package transitive lock (including the isolated environment's pip bootstrap) with artifact hashes: requirements.lock
+Executing Python binary and all installed versions: environment-manifest.json
+Runtime verifier: scripts/verify_environment.py
+
+All build, smoke, labeling, validation, audit preparation, and merge commands run as:
+uv run --python 3.12 --with-requirements .cs/epics/001-o-offline-commit-flow/artifacts/035/requirements.lock python <script>

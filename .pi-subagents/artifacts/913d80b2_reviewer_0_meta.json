@@ -1,0 +1,169 @@
+{
+  "runId": "913d80b2",
+  "agent": "reviewer",
+  "task": "对 GitHub #31 的最终高风险结果做独立只读语义评审。读取：`/tmp/cnm-train31/eval/high-risk.jsonl`（含每例完整 system/user/diff）、`/tmp/cnm-train31/eval/results-bf16-adapter/results.json`、`/tmp/cnm-train31/eval/results-q4/results.json`、两份 summary。对每个 26 case 的 BF16 与 Q4 输出分别核对：是否忠实覆盖 diff 的核心变化、是否无幻觉/重复、是否满足指定 style、附加 guidance、body 期望。逐候选给出 pass/partial/fail 数量与关键失败 case，明确量化退化程度；根据 #31 的门（风格/提示词仍明显不可靠就 STOP）给唯一 GO/STOP 结论。自动结构检查不能替代语义。不要修改任何文件。\n\n---\n**Output:**\nWrite your findings to exactly this path: /tmp/cnm-train31/eval/semantic-review.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.",
+  "exitCode": 0,
+  "usage": {
+    "input": 12,
+    "output": 7487,
+    "cacheRead": 45171,
+    "cacheWrite": 33506,
+    "cost": 0.456668,
+    "turns": 4
+  },
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": true,
+      "exitCode": 0,
+      "usage": {
+        "input": 12,
+        "output": 7487,
+        "cacheRead": 45171,
+        "cacheWrite": 33506,
+        "cost": 0.456668,
+        "turns": 4
+      }
+    }
+  ],
+  "durationMs": 103457,
+  "toolCount": 10,
+  "acceptance": {
+    "status": "checked",
+    "explicit": true,
+    "effectiveAcceptance": {
+      "level": "checked",
+      "explicit": true,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "changed-files",
+        "tests-added",
+        "commands-run",
+        "residual-risks",
+        "no-staged-files"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "criterion:criterion-1",
+        "status": "passed",
+        "message": "Required criterion 'criterion-1' satisfied."
+      },
+      {
+        "id": "evidence:changed-files",
+        "status": "passed",
+        "message": "changed-files evidence present."
+      },
+      {
+        "id": "evidence:tests-added",
+        "status": "not-applicable",
+        "message": "tests-added evidence explicitly reported as not applicable."
+      },
+      {
+        "id": "evidence:commands-run",
+        "status": "passed",
+        "message": "commands-run evidence present."
+      },
+      {
+        "id": "evidence:residual-risks",
+        "status": "passed",
+        "message": "residual-risks evidence present."
+      },
+      {
+        "id": "evidence:no-staged-files",
+        "status": "passed",
+        "message": "no-staged-files evidence present."
+      },
+      {
+        "id": "no-staged-files",
+        "status": "passed",
+        "message": "No staged files detected."
+      }
+    ],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "已对 26 个 case 的 BF16/Q4 输出逐一给出 pass/partial/fail、关键依据、量化退化和唯一 STOP 结论。"
+        }
+      ],
+      "changedFiles": [
+        "/tmp/cnm-train31/eval/semantic-review.md"
+      ],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "python3 load and compare high-risk.jsonl and both results.json files",
+          "result": "passed",
+          "summary": "加载并逐例核对两候选各 26 个输出。"
+        },
+        {
+          "command": "git status --short && git diff --cached --name-only",
+          "result": "passed",
+          "summary": "确认 staging area 为空；未触碰已有工作树内容。"
+        }
+      ],
+      "validationOutput": [
+        "BF16: 7 pass / 3 partial / 16 fail",
+        "Q4: 0 pass / 1 partial / 25 fail",
+        "Guidance: both 0/5 pass",
+        "Explicit body cases: both 0/4 pass",
+        "Decision: STOP"
+      ],
+      "residualRisks": [
+        "pass/partial 边界含人工判断，但硬性 style/guidance/body 失败足以独立支持 STOP。"
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "仅生成指定语义评审报告，未修改项目源码或测试。",
+      "reviewFindings": [
+        "blocker: BF16 严格语义通过率仅 26.9%。",
+        "blocker: Q4 严格语义通过率为 0%，量化退化严重。",
+        "blocker: 风格、guidance 与 body 仍明显不可靠，触发 #31 STOP 门。"
+      ],
+      "manualNotes": "summary.json 的自动结构通过率显著高估真实语义质量。"
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/913d80b2_reviewer_0_transcript.jsonl",
+  "timestamp": 1784953586411
+}

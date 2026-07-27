@@ -1,0 +1,1 @@
+20行；20个唯一 family；critical_error=0；fully_grounded=20；subject_quality：2=16、1=4、0=0；body_quality：2=18、1=0、0=2。

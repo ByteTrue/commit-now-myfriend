@@ -1,0 +1,123 @@
+{
+  "runId": "cfbae1bf-6121-400c-b076-8a2c6fc58155",
+  "agent": "worker",
+  "task": "为 GitHub #34 独立冻结训练操作方不可见的 shadow/historical gate。必须先读取 `gh issue view 34 --repo ByteTrue/commit-now-myfriend` 和 `.cs/epics/001-o-offline-commit-flow/artifacts/034/decision.json`。你是唯一可查看 raw gate 的构建者；最终回复和 public manifest 严禁泄露 raw diff、commit SHA、gold wording 或 Guidance 原句。\n\n输出：\n1) 私有 raw：`/tmp/cnm-pierce34/private/shadow.jsonl`，至少 30 case；`/tmp/cnm-pierce34/private/historical.jsonl`，60 个 commit。创建目录并 chmod 700/600。\n2) 公开 manifest：`.cs/epics/001-o-offline-commit-flow/artifacts/034/shadow-manifest.json`，只含 source policy、bundle SHA256、case counts、coverage counts、canonical repository exclusion groups（repo 名允许公开，用于训练排除）、date range、token bins、构建脚本/命令说明、secret scan counts，不含 commit SHA/diff/guidance/gold。\n3) 只含方法和统计、不含 raw 的 `/tmp/cnm-shadow-worker-summary.md`。\n\n选样要求：\n- 来自至少 8 个公开 canonical repositories，commit 时间严格晚于 2024-11-18；这些 repo 将全部排除于训练。\n- non-merge，完整多文件 textual diff；通过 GitHub API/必要时浅 clone 验证所有 changed files 都进入 diff，binary/missing/truncated patch 整个 commit 丢弃。\n- shadow 30+：覆盖七 style；至少 10 个未公开措辞的 Guidance，至少 6 required-body；包括 Chinese+Conventional、prefix+body、exact bullets+issue reference、subject-only 与原 body 冲突等组合，但不要在 public manifest 写具体措辞；至少一个完整 prompt 接近 16,000-token 产品上限，一个应因超过 16,000 prompt tokens 而在推理前拒绝。用 Qwen/Qwen2.5-Coder-0.5B-Instruct@ea3f2471... 官方 tokenizer 计算。每 case 保存 diff/style/guidance/history/expected constraint metadata；不要求固定 gold message，后续盲评可直接对 diff 评分。\n- historical 60：commit IDs/原始消息/diff/parent/repo，按固定 seed 从上述或额外 excluded repos 选择，覆盖小中长、多语言；public 只保存 commit-ID 列表的整体 hash。\n- secret/credential/high-entropy/PII scanner 在本地先跑；任何疑似命中整 case 删除。不要把本项目私有/未发布 diff 发送到外部服务。\n- 使用固定 seed `cnm-34-shadow-v1`，raw JSONL 每行规范 JSON；记录自身 schema version。计算文件和 case canonical hashes。\n- raw 文件生成后不要打印内容；只打印路径、hash、计数和公开 repo exclusions。\n\n如无法得到完整多文件 diff、接近 token 上限样本或可靠 tokenizer，不得伪造成功；报告 blocker。不要修改产品源码、Epic spec 或 GitHub issue。\n\n---\n**Output:**\nWrite your findings to exactly this path: /tmp/cnm-shadow-worker-summary.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.\n\n## Acceptance Contract\nAcceptance level: reviewed\nCompletion is not accepted from prose alone. End with a structured acceptance report.\n\nCriteria:\n- criterion-1: Implement the requested change without widening scope\n- criterion-2: Return evidence sufficient for an independent acceptance review\n\nRequired evidence: changed-files, tests-added, commands-run, validation-output, residual-risks, no-staged-files\n\nReview gate: optional by reviewer.\n\nFinish with a fenced JSON block tagged `acceptance-report` in this shape:\nUse empty arrays when no items apply; array fields contain strings unless object entries are shown.\n`criteriaSatisfied[].status` must be exactly one of: satisfied, not-satisfied, not-applicable.\n`commandsRun[].result` must be exactly one of: passed, failed, not-run.\n`manualNotes` and `notes` are optional strings; an empty string means no note and does not satisfy `manual-notes` evidence.\n```acceptance-report\n{\n  \"criteriaSatisfied\": [\n    {\n      \"id\": \"criterion-1\",\n      \"status\": \"satisfied\",\n      \"evidence\": \"specific proof\"\n    },\n    {\n      \"id\": \"criterion-2\",\n      \"status\": \"satisfied\",\n      \"evidence\": \"specific proof\"\n    }\n  ],\n  \"changedFiles\": [\n    \"src/file.ts\"\n  ],\n  \"testsAddedOrUpdated\": [\n    \"test/file.test.ts\"\n  ],\n  \"commandsRun\": [\n    {\n      \"command\": \"command\",\n      \"result\": \"passed\",\n      \"summary\": \"short result\"\n    }\n  ],\n  \"validationOutput\": [\n    \"validation output or concise summary\"\n  ],\n  \"residualRisks\": [\n    \"none\"\n  ],\n  \"noStagedFiles\": true,\n  \"diffSummary\": \"short description of the diff\",\n  \"reviewFindings\": [\n    \"blocker: file.ts:12 - issue found, or no blockers\"\n  ],\n  \"manualNotes\": \"anything else the parent should know\"\n}\n```",
+  "exitCode": 1,
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": false,
+      "exitCode": 1,
+      "error": "bash failed (exit 1): To disable this warning, you can either:\n\t- Avoid using `tokenizers` before the fork if possible\n\t- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)\nhuggingface/tokenizers",
+      "usage": {
+        "input": 54,
+        "output": 14572,
+        "cacheRead": 344142,
+        "cacheWrite": 39860,
+        "cost": 0.858626,
+        "turns": 18
+      }
+    }
+  ],
+  "error": "bash failed (exit 1): To disable this warning, you can either:\n\t- Avoid using `tokenizers` before the fork if possible\n\t- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)\nhuggingface/tokenizers",
+  "acceptance": {
+    "status": "rejected",
+    "explicit": true,
+    "effectiveAcceptance": {
+      "level": "reviewed",
+      "explicit": true,
+      "inferredReason": [
+        "async write-capable or risky run"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Implement the requested change without widening scope",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "validation-output",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        },
+        {
+          "id": "criterion-2",
+          "must": "Return evidence sufficient for an independent acceptance review",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "validation-output",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "changed-files",
+        "tests-added",
+        "commands-run",
+        "validation-output",
+        "residual-risks",
+        "no-staged-files"
+      ],
+      "verify": [],
+      "review": {
+        "agent": "reviewer",
+        "required": false
+      },
+      "stopRules": []
+    },
+    "inferredReason": [
+      "async write-capable or risky run"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Implement the requested change without widening scope",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "validation-output",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      },
+      {
+        "id": "criterion-2",
+        "must": "Return evidence sufficient for an independent acceptance review",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "validation-output",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "attestation",
+        "status": "failed",
+        "message": "Structured acceptance report not found."
+      }
+    ],
+    "verifyRuns": [],
+    "childReportParseError": "Structured acceptance report not found."
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/cfbae1bf-6121-400c-b076-8a2c6fc58155_worker_transcript.jsonl",
+  "skills": [],
+  "timestamp": 1784970306134
+}

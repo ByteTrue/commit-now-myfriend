@@ -1,0 +1,97 @@
+{
+  "runId": "f17b5814",
+  "agent": "reviewer",
+  "task": "[Read from: /Users/byte/workspace/projects/commit-now-myfriend/plan.md, /Users/byte/workspace/projects/commit-now-myfriend/progress.md]\n\nGoal: independently blind-review reviewer A's 200 frozen teacher-label cases and write exactly 10 score files.\n\nRead ONLY:\n- /Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/audit-instructions.md\n- /Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/audit-rubric.json\n- /tmp/cnm-pierce35/audit/review-input-manifest.json (only to obtain reviewer A slice hashes)\n- /tmp/cnm-pierce35/audit/reviewer-a-slice-00.jsonl through reviewer-a-slice-09.jsonl\nDo not read any repository/source identity, commit messages, reviewer B inputs/scores, existing /tmp/cnm-pierce35/review files, aggregate results, or web sources.\n\nFor each slice, write exactly 20 JSONL score rows to:\n/tmp/cnm-pierce35/audit/scores-a/reviewer-a-slice-NN.scores.jsonl\nEach object must have exactly: index, reviewer (literal A), input_slice_sha256 (the exact manifest hash for that slice), critical_error, fully_grounded, subject_quality, body_quality, evidence_quality, reason. Follow the frozen rubric strictly; inspect each complete diff semantically, not merely whether cited evidence exists. Do not repair labels. Do not modify project files. Complete all 200 independently. At the end, report totals and paths only; do not inspect reviewer B.",
+  "exitCode": 0,
+  "usage": {
+    "input": 135,
+    "output": 60494,
+    "cacheRead": 4536083,
+    "cacheWrite": 504833,
+    "cost": 7.238742750000001,
+    "turns": 48
+  },
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": true,
+      "exitCode": 0,
+      "usage": {
+        "input": 135,
+        "output": 60494,
+        "cacheRead": 4536083,
+        "cacheWrite": 504833,
+        "cost": 7.238742750000001,
+        "turns": 48
+      }
+    }
+  ],
+  "durationMs": 1387939,
+  "toolCount": 65,
+  "launchContractDigest": "9db54fa4e87e8ebfdb42ea5fa0d68727744df8b19ec420ef428c320afc7fae0d",
+  "acceptance": {
+    "status": "rejected",
+    "evidenceStatus": "rejected",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "attestation",
+        "status": "failed",
+        "message": "Structured acceptance report not found."
+      }
+    ],
+    "verifyRuns": [],
+    "childReportParseError": "Structured acceptance report not found."
+  },
+  "effects": {
+    "fileMutation": {
+      "status": "not-applicable",
+      "expected": false,
+      "attempted": true
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/f17b5814_reviewer_0_transcript.jsonl",
+  "timestamp": 1785068610103
+}

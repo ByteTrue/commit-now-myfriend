@@ -1,0 +1,76 @@
+{
+  "status": "frozen_pre_output",
+  "cases": 26,
+  "source_sha256": "fdd9d4e587a913187ee849b2ba62bafbb3c5ea53058269b9278e6f6fa3a4175f",
+  "output_sha256": "3a858799050437be10796bcace46156b703c17506eb624b667dfe8884f6148a1",
+  "target_signature_algorithm": "cnm.leakage-exclusion.v1",
+  "target_entries": [
+    {
+      "commit_sha256": "1d5d8afd02152a57c9bc37750dda0e5d9fd9582396ecd36b4591bfedbd4a17e4",
+      "normalized_target_sha256": "8d4f992860e0f9d5aafd38482b48cafcca8e95bfd8548f6f7baac6332860f519",
+      "target_token_minhash": [
+        "36f235b5c4e8d97e440f9c834ea413ad74b8457d129975d8ec823a02f0fdfb23",
+        "70d4c5baaaada5dabb0a4449acde592ac3f28a5ee9760313f7ad64bee9dca0fe",
+        "7479ead2f83ef9421fad59b2252044f2b60f315237b1a640cbd4de90a84a2e83"
+      ]
+    },
+    {
+      "commit_sha256": "36d6af6591db365d8278783ddce7be0c036c7d39b34084a4483d78a651a26e08",
+      "normalized_target_sha256": "e0fcadf3fb0e63e8d502f914ffa4ec2b71aa58fcf45ae25508a9c02da01a5a86",
+      "target_token_minhash": [
+        "00578e56c3c84e113d93ad5e701173a4f18b45fc7a2e36012d042c011dd1a48c",
+        "0640429e43bd616278624fd7a9a77e7c6101b3bf3f394055fc3998cd9a94e0a6",
+        "208ef967604fa50eb6df122e6ac147dcbcb735163b5898c09c3d319a281e98e0",
+        "22b2ca9a9b0d83228a3dfe17728693b2fda0123fcd966f62766826e7eb8fd9a5",
+        "de5e0ae9bf2197e05bb59692a68c121b1aaab34fb8f287d5249990996af7e9e3",
+        "df83c22edf63fed57c3833fc85a983b902246546fdcdc9194022d50928dbf2e2"
+      ]
+    },
+    {
+      "commit_sha256": "584178a8e9859393bcb437e78df928104e1467cf2b113855007e488ca7f35f13",
+      "normalized_target_sha256": "b9835b2888a6daecf1494b7886acb878b7b2610cd5d0224b67db410e47c75462",
+      "target_token_minhash": [
+        "2eb7091877bd0125bce52fd52c29cecc32e28b3c5aab47840e53d68e9fc2c0ea",
+        "60e62ac10f0d4b0d5977045d9cffe41c2e9da1a5f7bd0c5828dffad4dac2fbbb",
+        "73620823661986c04e6a2fe3ef26abc3eef96cd91429fff864233eea8f1f9b00"
+      ]
+    },
+    {
+      "commit_sha256": "7cf9f0052306241f930d52b53f9aab74a3c682bacd4189da1c6677d1df4e1371",
+      "normalized_target_sha256": "d2d51916033c1ff7cda51fb86e71ef52d454902a60a164112539555301282731",
+      "target_token_minhash": [
+        "14afeefac289c50a62145f7da109d8560fb584678bc51f0745ea206a8c2a5b3f",
+        "2a6f4bd0adb6889ab9ce406e6b45cf4cf867da8947c130b1c4048f9f518b2fc9",
+        "d6324b3f8401cf40d10d4a0602af209e87686b5ecf9fa508cc090fa2b87aa483",
+        "d6f06859613164ca66001b05417ce8bc96775b977dc537d3048be0edca4e9e27",
+        "e0bbd2adf2123887a43b5f637c48e99f388b8cf279acb73a0564b33d64cc27e0",
+        "f4bdb5f298012fbc4a2cda8d5d3b6d1d6b6a2386d3d196a757df43103929f228"
+      ]
+    },
+    {
+      "commit_sha256": "b86157cb19e5bcf79bb9f4ca3daa13d719acccaa13ee056808f9d18e7bf8992f",
+      "normalized_target_sha256": "a35501845c921a7effc32ac182044a240f9c0a4df5e5a541f8b00e84d1ea19f6",
+      "target_token_minhash": [
+        "0160e64e0b196ca27e8a8c249af412c219b9c4505034aca80625a32b92086913",
+        "168b6ba64d85b8c405b409def647c2157d70d80e7f3d8dac0a0e9d6686775901",
+        "38289f131ea291b67d41219859316faffa5835b3be026907a417e3b9a3cf4443",
+        "82d9fb41c40f2e106af008e26077feb156e4a0bd7735fedf117a3c782ac90ab3",
+        "dc550bfe9eb2046812c802aaa6c3613d7a9c30e5c30b428fc2bee202cbb5a07c"
+      ]
+    },
+    {
+      "commit_sha256": "e323683fddb7fa2c555274cb706da2be9c294446c7a2132eb05357381318c0c2",
+      "normalized_target_sha256": "ad42ba5a5ee6e409c7bfc0994f9c2753eb4e169593ac3fae2a790e9777f4c07b",
+      "target_token_minhash": [
+        "01329bb1726dbe7bd1064a5f2bce817d7f36ed3be994fb4465a62d11be583ca3",
+        "03379dcbf3fcb000fc9d3c7ad3328c8e4e8ab51c5436a98a1cc362cba773f64a",
+        "098f225727fc275dbabe5dc6d9de30bae888137a7a873880c5e6a464f09d82cf",
+        "0a81f986060eae37b6ff7a8c2f709a7860259cbe6b1e0fbc58ca0e7f0741469f",
+        "0c2bb07ec7d389beafa8d739ea8b9aa4471ddcb3905b7ac65104c20b6ee556b3",
+        "1031f278fd73305c20b90690c0191637743caa26f7ee05d1923888ec04b614da",
+        "118cb2e71ff964ad5e9c15869377c16fe5e5ce47b66045eb466c4aba59897dbb",
+        "1269e3a7ff3ecc46c999af14e5c635099a6de54170e542519759846bffb2f752"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "status": "awaiting_blind_audit",
+  "method": "deterministic transformations of source-grounded records; no teacher model",
+  "automated_variant_checks": [
+    "schema",
+    "renderer",
+    "guidance_constraint",
+    "secret",
+    "pii"
+  ],
+  "train_base": 6000,
+  "train_variants": {
+    "issue": 120,
+    "no_body": 120,
+    "bullets": 100,
+    "body": 100,
+    "prefix": 60
+  },
+  "valid_base": 1000,
+  "valid_variants": {
+    "issue": 20,
+    "no_body": 20,
+    "bullets": 15,
+    "body": 15,
+    "prefix": 10
+  },
+  "test": 1000,
+  "output_hashes": {
+    "train": "374b150eb07dc5a525dd35c15749254e73152558ebeb886e46e8575bca7f3bdc",
+    "valid": "1f51161596a104425d8a8482f0e4bc7c607d9aa2ea7bd2ee860c1d08c4e56345",
+    "test": "c9b43f63829536270a1a86de764cbe8057c3c8d2aa34b694e444ee6a39950c2d",
+    "audit_guidance_100": "514f77e606175e4133fb80e096c3ecc3d63c8ac71a9c7915d4faad64bf6870e2"
+  },
+  "max_tokens": 8192
+}

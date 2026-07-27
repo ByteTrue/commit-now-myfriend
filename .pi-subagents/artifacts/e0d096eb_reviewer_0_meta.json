@@ -1,0 +1,183 @@
+{
+  "runId": "e0d096eb",
+  "agent": "reviewer",
+  "task": "只读审查 `/tmp/cnm-train31/data/{train,valid,test}.jsonl` 和 `/tmp/cnm-train31/data/families.jsonl`，重点判断这个 #31 微调数据是否足以作为可审计穿刺：按固定哈希方式跨 train/valid/test 各抽样至少 20 条（总计至少 60），检查 assistant target 是否被 diff 支持、style/guidance 是否遵从、是否有明显错误/幻觉/机械重复、仓库 split 泄漏或训练/评测污染风险。也核对 `/tmp/cnm-train31/data/manifest.json` 与 `/tmp/cnm-train31/eval/manifest.json`。不要修改任何文件。按 blocker/high/medium/low 输出 findings，给出明确 go/stop 建议；如果没有阻断项也要说清残余风险。\n\n---\n**Output:**\nWrite your findings to exactly this path: /tmp/cnm-train31/data-review.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.",
+  "exitCode": 0,
+  "usage": {
+    "input": 12,
+    "output": 7773,
+    "cacheRead": 69999,
+    "cacheWrite": 45560,
+    "cost": 0.5529995,
+    "turns": 4
+  },
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": true,
+      "exitCode": 0,
+      "usage": {
+        "input": 12,
+        "output": 7773,
+        "cacheRead": 69999,
+        "cacheWrite": 45560,
+        "cost": 0.5529995,
+        "turns": 4
+      }
+    }
+  ],
+  "durationMs": 111863,
+  "toolCount": 11,
+  "acceptance": {
+    "status": "checked",
+    "explicit": true,
+    "effectiveAcceptance": {
+      "level": "checked",
+      "explicit": true,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "changed-files",
+        "tests-added",
+        "commands-run",
+        "residual-risks",
+        "no-staged-files"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "criterion:criterion-1",
+        "status": "passed",
+        "message": "Required criterion 'criterion-1' satisfied."
+      },
+      {
+        "id": "evidence:changed-files",
+        "status": "passed",
+        "message": "changed-files evidence present."
+      },
+      {
+        "id": "evidence:tests-added",
+        "status": "not-applicable",
+        "message": "tests-added evidence explicitly reported as not applicable."
+      },
+      {
+        "id": "evidence:commands-run",
+        "status": "passed",
+        "message": "commands-run evidence present."
+      },
+      {
+        "id": "evidence:residual-risks",
+        "status": "passed",
+        "message": "residual-risks evidence present."
+      },
+      {
+        "id": "evidence:no-staged-files",
+        "status": "passed",
+        "message": "no-staged-files evidence present."
+      },
+      {
+        "id": "no-staged-files",
+        "status": "passed",
+        "message": "No staged files detected."
+      }
+    ],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "按固定 SHA-256 方法人工抽查 train/valid/test 各 20 个独立 family，并给出 train.jsonl:307、valid.jsonl:56/114/131、test.jsonl:4/7/92 等具体路径、行号和 severity。"
+        }
+      ],
+      "changedFiles": [
+        "/tmp/cnm-train31/data-review.md"
+      ],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "wc -l data/{train,valid,test,families}.jsonl; read manifests and sample records",
+          "result": "passed",
+          "summary": "确认记录数为 840/140/140，families 为 280；读取两个 manifest。"
+        },
+        {
+          "command": "python3 inline full-corpus manifest/split/duplicate/style audit",
+          "result": "passed",
+          "summary": "解析全部 1,120 条，验证 data manifest SHA-256、family/repo/diff/target split 交集和重复 target。"
+        },
+        {
+          "command": "python3 inline fixed-hash 20-family-per-split sampler",
+          "result": "passed",
+          "summary": "固定种子 cnm-31-review-v1 抽出并人工核对 60 个不同 family。"
+        },
+        {
+          "command": "python3 inline eval schema/literal-overlap audit",
+          "result": "passed",
+          "summary": "检查 26 条 high-risk eval；未发现 family/repo/target 或 substantial exact-prompt 污染。"
+        }
+      ],
+      "validationOutput": [
+        "data SHA-256 与 manifest 全部一致",
+        "跨 split family/repo/user-diff/target 交集均为 0",
+        "60-family 人工样本中发现 5 个明显坏 target",
+        "发现 1 条疑似明文 Redis 凭据及 1 条 custom-bullets 幻觉"
+      ],
+      "residualRisks": [
+        "eval 污染检查是精确/字面检查，未做语义代码克隆检测",
+        "未对全量 corpus 执行专用 secret scanner",
+        "每 family 四变体及 140 组重复 target 降低有效独立样本量",
+        "data manifest 缺少稳定生成脚本和上游数据版本哈希"
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "只新增审查报告；未修改被审查的数据、families、manifest 或 eval 文件，也未 stage 文件。",
+      "reviewFindings": [
+        "blocker: data/train.jsonl:307, data/valid.jsonl:114/131, data/test.jsonl:4/7 - 机械截断或语义残缺 target，建议 STOP",
+        "high: data/valid.jsonl:56 - diff 含疑似明文 Redis 凭据",
+        "high: data/test.jsonl:92 - exactly-two-changed-files guidance target 幻觉了 src 作为第二个 changed file",
+        "medium: 1120 records 仅对应 280 个 family，且 280 条落入 140 组完全重复 target",
+        "low/correct: manifest 哈希与数量一致，repo/family/diff/target 无跨 split 精确泄漏"
+      ],
+      "manualNotes": "明确建议 STOP；完成过滤、重写截断 target、重生成哈希并复跑同一抽样后再 GO。"
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/e0d096eb_reviewer_0_transcript.jsonl",
+  "timestamp": 1784952462279
+}

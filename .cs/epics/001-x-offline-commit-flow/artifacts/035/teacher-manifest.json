@@ -1,0 +1,47 @@
+{
+  "status": "frozen_pre_output",
+  "repository": "Qwen/Qwen2.5-Coder-14B-Instruct-GGUF",
+  "revision": "d0a692ef765eefbf2fabb130b3cb2e8917e3d225",
+  "file": "qwen2.5-coder-14b-instruct-q6_k.gguf",
+  "bytes": 12124683712,
+  "sha256": "302a079369ad8b66c8e8ec1bfa62d109c64d8015e9bfd52d9c6cf4c6c9f36b5f",
+  "license": "Apache-2.0",
+  "acquisition": {
+    "mirror": "ModelScope/Qwen/Qwen2.5-Coder-14B-Instruct-GGUF",
+    "revision": "2a7d12d324c18b5c1a31ceec7a2fb5c3f896f076",
+    "binary_identity_verified_by_sha256": true
+  },
+  "runtime": {
+    "path": "/opt/homebrew/bin/llama-server",
+    "version": "9430",
+    "revision": "d48a56eff",
+    "sha256": "7b1151b319e977564a5422aa00902f64edb87b350c02b65f8dc44c5e183deeea"
+  },
+  "environment": {
+    "python": "3.12.13",
+    "uv": "0.11.14",
+    "requirements_lock": "requirements.lock",
+    "packages": 31,
+    "verified_by": "scripts/verify_environment.py"
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 63286,
+    "alias": "local-teacher",
+    "context_tokens": 9216,
+    "parallel": 1,
+    "gpu_layers": 99,
+    "threads": 12,
+    "flash_attention": "on",
+    "owned_by": "scripts/run_teacher.py",
+    "remote_endpoint_allowed": false
+  },
+  "decode": {
+    "temperature": 0,
+    "top_p": 1,
+    "top_k": 0,
+    "seed": 424242,
+    "max_tokens": 1024,
+    "content_retries": 0
+  }
+}

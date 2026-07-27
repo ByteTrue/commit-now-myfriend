@@ -1,0 +1,198 @@
+{
+  "status": "frozen_pre_output",
+  "files": {
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/issue-spec.md": {
+      "bytes": 9005,
+      "sha256": "37d8cc9929edaadbc274e3bf11dc1f6acdf77b91825ebc0b37826288b938c47d"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/teacher-manifest.json": {
+      "bytes": 1343,
+      "sha256": "917d660f940dd4e51e94642c56dd57934d7a16e20f50d5922cf55e3193d4fd8e"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/teacher-prompt.txt": {
+      "bytes": 1522,
+      "sha256": "38b36702616f892ad2e1523ff01e80193fc1972f53d84032ca9a6352c250a25e"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/teacher-schema.json": {
+      "bytes": 911,
+      "sha256": "facaee4e9f63028756b640bed1ce7ce9f3393a227a743a1eb4d2a8d8812bf173"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/audit-rubric.json": {
+      "bytes": 1504,
+      "sha256": "e5699ac8b3ed87b21e92306e4ee397174630f6e3e355be1672822b8b08848a96"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/audit-instructions.md": {
+      "bytes": 1703,
+      "sha256": "520e5ad487bd917b92566b1c3af73ac57d11f3e74554ee6ebdb2b2134ce54388"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/prior-audit-exclusions.json": {
+      "bytes": 31874,
+      "sha256": "212f14743d53003a40a11a23ee995334caf7c5ed3407f6bfe6cc7a7252106cf4"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/leakage-v2-exclusions.json": {
+      "bytes": 123381,
+      "sha256": "d0b4f358e5e3bb5557ca18750ae05ce37890953459189e3bce4c4b76a88ea601"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/tokenizer-manifest.json": {
+      "bytes": 1395,
+      "sha256": "4864e3897a5161145874397080b8ba7e85eb0ba01dc4fa8a0e16d617fcc8d5b5"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/034/scripts/build_dataset.py": {
+      "bytes": 30929,
+      "sha256": "c869224d2dc0864b2c68a849971e15315cfd9bb04dcd5f5b1c03cdef78ffdb10"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/034/scripts/pipeline.py": {
+      "bytes": 9065,
+      "sha256": "1cffe1b5c1fd40f86af044b279b590cea525893f1d23c997964fbeff756b30de"
+    },
+    "/tmp/cnm-pierce34/base/config.json": {
+      "bytes": 710,
+      "sha256": "bc8d587c364e4905e8510be14d07c5e69c84347c17f7c7607d5ee4470e72cb50"
+    },
+    "/tmp/cnm-pierce34/base/tokenizer.json": {
+      "bytes": 7031673,
+      "sha256": "a8506e7111b80c6d8635951a02eab0f4e1a8e4e5772da83846579e97b16f61bf"
+    },
+    "/tmp/cnm-pierce34/base/tokenizer_config.json": {
+      "bytes": 7306,
+      "sha256": "7e88129d9769a0b14b1587a7d5e829fe93ac0e1511636471fdfc0811951418e6"
+    },
+    "/tmp/cnm-pierce34/base/special_tokens_map.json": {
+      "bytes": 613,
+      "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+    },
+    "/tmp/cnm-pierce34/base/added_tokens.json": {
+      "bytes": 605,
+      "sha256": "58b54bbe36fc752f79a24a271ef66a0a0830054b4dfad94bde757d851968060b"
+    },
+    "/tmp/cnm-pierce34/base/merges.txt": {
+      "bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    "/tmp/cnm-pierce34/base/vocab.json": {
+      "bytes": 2776833,
+      "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/teacher-environment.txt": {
+      "bytes": 600,
+      "sha256": "56db04e6eed96409ed9f2c23783f109de66dccf987537f2ee096eb31890add27"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/requirements.in": {
+      "bytes": 63,
+      "sha256": "3a97fc0c9848b69e3f39904264c691bdf656569106ec1623018240e66a65d64d"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/requirements.lock": {
+      "bytes": 41529,
+      "sha256": "b7d36b78115e236b8f0797246459f3315b394606b5af274d37cfa9c43bb2e585"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/environment-manifest.json": {
+      "bytes": 1631,
+      "sha256": "84f4e2daba9e7919c35c3f65b1241b747517140a1a71d77eeec0d47395d3c0c2"
+    },
+    "/Users/byte/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/bin/python3.12": {
+      "bytes": 18003968,
+      "sha256": "a395f264e5612a2819662ed3e37fd30d39ed61179b98e5f86c3c783a008d8623"
+    },
+    "/Users/byte/.local/share/mise/installs/uv/0.11.14/uv-aarch64-apple-darwin/uv": {
+      "bytes": 47630384,
+      "sha256": "77b80ca26ad2142c50b870c730d9b8f617665720f09888630257b40d0678e658"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/pilot-manifest.json": {
+      "bytes": 4106,
+      "sha256": "459ce49c18e2e754487de40d430316efd5765a7fabf1432316877a7dd7b106d7"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/pilot-reproducibility.json": {
+      "bytes": 445,
+      "sha256": "b7c518f3a6e254659b6d514cf486a70cdc138bb289864f49aa60166307c8b15f"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/limit-check.json": {
+      "bytes": 342,
+      "sha256": "9f2b9b26f400901ef3d1c3acfbae26130143d2aa18784e4f31dbf5cd66b72a39"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/build_pilot.py": {
+      "bytes": 18809,
+      "sha256": "8de1fe365ba9cc0c8834d00f56597282c2cd9d35305ae3880c5f098b8685b8de"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/build_leakage_exclusions.py": {
+      "bytes": 4449,
+      "sha256": "7df464e0dd1bd8f64fcb493ec9ddef8fa771d33db3a38b82d199ec0711b3b683"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/leakage_v2.py": {
+      "bytes": 2628,
+      "sha256": "2a16359ae98208f9e30088e581fa15a1488d9403591c4d3b6e69741f1c4fe6f0"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/label_pilot.py": {
+      "bytes": 7783,
+      "sha256": "f75e5097558b6a7e9f053442717f16c58033e3810d831548d6963a53c466db54"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/run_teacher.py": {
+      "bytes": 7109,
+      "sha256": "981eb0c9d05560302e954097a932472669476c66bad3804df9ea0920185b543c"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/verify_environment.py": {
+      "bytes": 3656,
+      "sha256": "fc3c82e03820fec415c013589b10e382fa2b0ffe4a219c95b4737b64089d61b0"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/validate_labels.py": {
+      "bytes": 6508,
+      "sha256": "9c723c6bfd8e0fc9d820c0ac78b986f5905d0ca4fb7818a48181a5ef1615c253"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/test_pilot.py": {
+      "bytes": 1438,
+      "sha256": "577b7adf06b67c05213b35ad3bf7a7f000c3b5e1a0da7043e726f7ba18ef4192"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/test_leakage_v2.py": {
+      "bytes": 1136,
+      "sha256": "315092e43e0dfccf7f128b7a3f9c1463b64eebaaf7a477e8932402308f3ba770"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/test_teacher_tools.py": {
+      "bytes": 2797,
+      "sha256": "84a4a40097a6f65aa5a4da99a93de25af5190d61c173afcdf083e5fdbc772086"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/test_audit_tools.py": {
+      "bytes": 2660,
+      "sha256": "612a6c51a872dc2dbafaec233ba1513f4e102e892f9eaf377b3fc2a242da861a"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/smoke.py": {
+      "bytes": 5201,
+      "sha256": "b45142aa689ae011d43aa0ba5541bad9cf2ef35ada6c1ca98f80473ea76dff90"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/check_limits.py": {
+      "bytes": 3559,
+      "sha256": "f4b58de6e35c465820178f1c49c104d1173eb495f4104de8eca3f2d280767d38"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/prepare_audit.py": {
+      "bytes": 3439,
+      "sha256": "3079ee1884280cf0a4811d3825f110487e96f33212af39bb6cd964c0815d4b9d"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/merge_scores.py": {
+      "bytes": 11957,
+      "sha256": "fe7b4f7d9f6d31e4c27512b7d8136e090e5cacc845014a3d5b4617dfc828c43c"
+    },
+    "/Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/freeze.py": {
+      "bytes": 3419,
+      "sha256": "73e9c06981be3708e51411d3e115fd9e3712316025ed911af6ca8d6a743b0f41"
+    },
+    "/tmp/cnm-pierce35/data/pilot-200.jsonl": {
+      "bytes": 2137671,
+      "sha256": "a687322106fedabab5f0d3c187b0e08a423dc5fb391d6c8dde693c7687b568a5"
+    },
+    "/tmp/cnm-pierce35/data/over-limit.jsonl": {
+      "bytes": 29864,
+      "sha256": "3350f89b8e8a52ba9a884b5c7b0eef6d8658f07990d3e51d717f0762a0f7bd72"
+    },
+    "/tmp/cnm-pierce35/data/audit-plan.json": {
+      "bytes": 6641,
+      "sha256": "ed24c7da4385cc75efa90ee55ad2ffef9b0c955a34a9f6f1cc97d48365862f79"
+    },
+    "/tmp/cnm-pierce35/model/qwen2.5-coder-14b-instruct-q6_k.gguf": {
+      "bytes": 12124683712,
+      "sha256": "302a079369ad8b66c8e8ec1bfa62d109c64d8015e9bfd52d9c6cf4c6c9f36b5f"
+    },
+    "/opt/homebrew/bin/llama-server": {
+      "bytes": 51424,
+      "sha256": "7b1151b319e977564a5422aa00902f64edb87b350c02b65f8dc44c5e183deeea"
+    }
+  },
+  "labels_directory_empty": true
+}

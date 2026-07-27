@@ -1,0 +1,41 @@
+{
+  "status": "complete",
+  "reviewers": {
+    "A": {
+      "context": "fresh",
+      "run_ids": [
+        "f17b5814/run-0"
+      ],
+      "score_hashes": {
+        "reviewer-a-slice-00.scores.jsonl": "beee37453cfde9ec6d98f4f123c7f7c41500e51f6705a3350aee97b7a8f88ae0",
+        "reviewer-a-slice-01.scores.jsonl": "4b4656df50b4da6f7684edf853b9d1194e055f2adf624e36145d109331a5bb59",
+        "reviewer-a-slice-02.scores.jsonl": "7c9ef7e4f6e197796cbcff908569ab6cf7c19cb5564d349732f98e095d1655a0",
+        "reviewer-a-slice-03.scores.jsonl": "29337c3d88b8ec4e6432beb212961acbbba577bd75e4409ecb3b2a97451bf04b",
+        "reviewer-a-slice-04.scores.jsonl": "32a653186642b6f0d4d23ed06c587da2bc4fd5efa09a0180528af1c570ea4f6e",
+        "reviewer-a-slice-05.scores.jsonl": "67e90d5d05e295c4ea6443f3340e5e674caa1f0460064d1b54bb1f9ce878afa9",
+        "reviewer-a-slice-06.scores.jsonl": "aea637f76634e3a30a68b9e2e026a9483c731fb2fd261f37e1de70c4da7b4969",
+        "reviewer-a-slice-07.scores.jsonl": "5dce63c2a9a2d8c1becbe331419da63279b6b7952d8f7c995542e5b8380dc69d",
+        "reviewer-a-slice-08.scores.jsonl": "b98977fb53d751dcf02e72bfd7f24a69e70cce4d0b66d19a7c9560e21165c907",
+        "reviewer-a-slice-09.scores.jsonl": "0cf1b3d8b5acaa48c301b00cbec70d9033aa4acfa9e2ad14205356baa8e957c2"
+      }
+    },
+    "B": {
+      "context": "fresh",
+      "run_ids": [
+        "f17b5814/run-1"
+      ],
+      "score_hashes": {
+        "reviewer-b-slice-00.scores.jsonl": "a3d2c06f7c969d8f500c94dc29be70b2a12430f186c87ad990082d017078faf3",
+        "reviewer-b-slice-01.scores.jsonl": "74bce6d1c3b1072cc38a5b9cf232cb3648bc48bec90bb6bd552d8408e283c161",
+        "reviewer-b-slice-02.scores.jsonl": "1ceab3e74b4cad74946d3da65dead0da9cafdbbfa6066d7ccb9972a58cfb60f3",
+        "reviewer-b-slice-03.scores.jsonl": "9a9102ec9f8c9e981dd903c41ef0487c66538cf9e31ddf00fa421bed8b15f61d",
+        "reviewer-b-slice-04.scores.jsonl": "2cc1ff0c8627500447ba43e72a6a6c50359fa815dc618c0c23c0c5924f823d4b",
+        "reviewer-b-slice-05.scores.jsonl": "c24e986c73b6adcd858973761562a92689447aa59f54b649a1afbe2d46c6c1ee",
+        "reviewer-b-slice-06.scores.jsonl": "04d38aa8ae5c8107b4d7e8dd6ad117ec413e25c304da824851b0ae930d04d787",
+        "reviewer-b-slice-07.scores.jsonl": "176986503b3ab3d6399c60eaf8339d0ac68064d0a61fb0d985dc52fd4e1597eb",
+        "reviewer-b-slice-08.scores.jsonl": "d7c7268b59f7907cf0a5ab11d812cfe37d494c3fcca159293c7057f30c6a73c6",
+        "reviewer-b-slice-09.scores.jsonl": "78f70f2277bdfef0a5dcfe6c9fe2d418cf9f6eefd11d2938137d791a7329658c"
+      }
+    }
+  }
+}

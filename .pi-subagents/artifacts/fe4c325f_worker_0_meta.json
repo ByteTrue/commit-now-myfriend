@@ -1,0 +1,98 @@
+{
+  "runId": "fe4c325f",
+  "agent": "worker",
+  "task": "独立增强 cnm #34 hidden gate 的公开泄漏签名；可以读取 `/tmp/cnm-pierce34/private/shadow.jsonl` 和 historical.jsonl，但禁止在回复/公开文件泄露 raw diff、commit、message、guidance。\n\n在 `.cs/epics/001-o-offline-commit-flow/artifacts/034/shadow-manifest.json` 新增 `leakage_exclusions`，对 hidden 两集合每个 underlying commit（去重）输出仅哈希：\n1. `normalized_patch_sha256`：移除 diff/path/index/hunk-header 元数据，只保留 +/- changed line，去前缀、strip、collapse whitespace、lower 后连接并 SHA256；\n2. `changed_token_minhash`：对上述 changed content tokenize 为 `[A-Za-z0-9_]+|非空白符号`，5-token shingles SHA256，保存字典序最小 8 个（不足则全量）；\n3. historical `normalized_target_sha256` 与 target 3-token shingle 最小8哈希；shadow 无 gold 不写 target；\n4. 每项只保留 `set`（shadow/historical）、这些 signatures 与原有 source_commit_sha256/complete_diff_sha256 哈希，不保留 raw ID。\n5. 新增 algorithm version/exact normalization说明、counts、更新 manifest 自身之外的 bundle hash。验证 private file原 hash/0600不变。\n\n还要新增 `repository_groups`：将公开 repository_exclusions 的 canonical repo 映射为自身 canonical group（若 clone remote 能证明 fork parent 则映射 parent，否则自身），不猜测。\n\n回复只给 PASS/FAIL、条目数量和公开 manifest 路径。\n\n---\n**Output:**\nWrite your findings to exactly this path: /tmp/cnm-shadow-signature-summary.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.",
+  "exitCode": 1,
+  "usage": {
+    "input": 33,
+    "output": 8204,
+    "cacheRead": 329090,
+    "cacheWrite": 41352,
+    "cost": 0.66928,
+    "turns": 11
+  },
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": false,
+      "exitCode": 1,
+      "error": "Subagent exceeded turn budget after 11 assistant turns (soft limit 8 + grace 1).",
+      "usage": {
+        "input": 33,
+        "output": 8204,
+        "cacheRead": 329090,
+        "cacheWrite": 41352,
+        "cost": 0.66928,
+        "turns": 11
+      }
+    }
+  ],
+  "durationMs": 124527,
+  "toolCount": 16,
+  "error": "Subagent exceeded turn budget after 11 assistant turns (soft limit 8 + grace 1).",
+  "acceptance": {
+    "status": "rejected",
+    "explicit": true,
+    "effectiveAcceptance": {
+      "level": "checked",
+      "explicit": true,
+      "inferredReason": [
+        "write-capable worker/task"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Implement the requested change without widening scope",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "changed-files",
+        "tests-added",
+        "commands-run",
+        "residual-risks",
+        "no-staged-files"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "write-capable worker/task"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Implement the requested change without widening scope",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "turn-budget",
+        "status": "failed",
+        "message": "Acceptance was not evaluated because the subagent exceeded its turn budget."
+      }
+    ],
+    "verifyRuns": []
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/fe4c325f_worker_0_transcript.jsonl",
+  "timestamp": 1784971401153
+}

@@ -1,0 +1,139 @@
+{
+  "runId": "6a6ca5d9",
+  "agent": "researcher",
+  "task": "为 cnm GitHub #34 做只读研究：寻找可合法用于训练 Qwen2.5-Coder-0.5B 的“完整多文件 commit diff + commit message”公开数据源。优先官方/原始数据源，确认每个候选的数据形状（是否完整 commit 而非单文件 slice）、规模、语言、license 字段、下载方式、能否 repository-isolated split、已知泄漏/质量风险。阅读 GitHub #34（gh issue view 34）和 /tmp/cnm-train31/build_dataset.py 理解旧数据问题。给出一个最小、可执行、无需建设训练平台的数据方案；不修改仓库。把完整报告写到 /tmp/cnm-34-dataset-research.md，并在最终回复给出结论。\n\n---\nUpdate progress at: /Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/progress/6a6ca5d9/progress.md\n\n---\n**Output:**\nWrite your findings to exactly this path: /tmp/cnm-34-dataset-research.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.",
+  "exitCode": 1,
+  "usage": {
+    "input": 36,
+    "output": 9275,
+    "cacheRead": 633204,
+    "cacheWrite": 120321,
+    "cost": 1.3470382500000002,
+    "turns": 12
+  },
+  "model": "bytetrueapi/gpt-5.6-sol:medium",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:medium"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:medium",
+      "success": false,
+      "exitCode": 1,
+      "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+      "usage": {
+        "input": 36,
+        "output": 9275,
+        "cacheRead": 633204,
+        "cacheWrite": 120321,
+        "cost": 1.3470382500000002,
+        "turns": 12
+      }
+    }
+  ],
+  "durationMs": 185817,
+  "toolCount": 54,
+  "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+  "acceptance": {
+    "status": "attested",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "报告给出带 severity 的具体 review findings，定位 `/tmp/cnm-train31/build_dataset.py` 的 `load_commitpack()`/`load_lca()`，逐候选记录形状、规模、语言、license、下载、repo split 与风险，并提供 residual risks。"
+        }
+      ],
+      "changedFiles": [
+        "/tmp/cnm-34-dataset-research.md",
+        "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/progress/6a6ca5d9/progress.md"
+      ],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "read /tmp/cnm-train31/build_dataset.py",
+          "result": "passed",
+          "summary": "确认 CommitPackFT 单文件 slice 与 LCA mods 聚合两条数据路径。"
+        },
+        {
+          "command": "web research: primary dataset cards, papers, Zenodo, HF streaming docs",
+          "result": "passed",
+          "summary": "核实 CommitChronicle、LCA、CommitBench、CommitPack/FT 的公开 schema、规模、许可与下载方式。"
+        },
+        {
+          "command": "gh issue view 34",
+          "result": "not-run",
+          "summary": "runtime 未提供 shell/gh；web search 未索引 issue。"
+        },
+        {
+          "command": "download/sample candidate datasets",
+          "result": "not-run",
+          "summary": "请求的 fetch_content/get_search_content child tools 未配置，不能独立下载验证。"
+        }
+      ],
+      "validationOutput": [
+        "CommitChronicle card: 10.7M commits, 20 languages, Apache/BSD-3-Clause/MIT source repositories, commit-level mods schema.",
+        "CommitBench paper: 1,664,590 examples; dataset CC BY-NC 4.0; standard 512-token and long 2,048-token limits.",
+        "Local script inspection: CommitPackFT family key includes new_path and body is forcibly discarded; LCA aggregates every mod."
+      ],
+      "residualRisks": [
+        "GitHub #34 content was not directly available in this runtime.",
+        "Candidate files were not downloaded for empirical row/schema/completeness checks.",
+        "Qwen pretraining leakage cannot be quantified from public information.",
+        "Permissive source-code licenses and model-weight release should receive jurisdiction-specific legal confirmation."
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "只写研究报告与运行进度文件；未修改仓库源码或测试。",
+      "reviewFindings": [
+        "blocker: /tmp/cnm-train31/build_dataset.py load_commitpack() - single-file slices are treated as commit families",
+        "high: CommitBench - CC BY-NC 4.0 and bounded diff lengths make it unsuitable as the default complete, commercially usable source",
+        "high: CommitPackFT - filtered per-file rows cannot cheaply prove full-commit completeness",
+        "medium: CommitChronicle - create a deterministic repository-isolated split rather than trusting default partitions"
+      ],
+      "manualNotes": "推荐只流式抽取 CommitChronicle 的 8k 完整 commit families，先人工盲审 200 行，再执行既定 26-case puncture test。"
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/6a6ca5d9_researcher_0_transcript.jsonl",
+  "timestamp": 1784966944838
+}

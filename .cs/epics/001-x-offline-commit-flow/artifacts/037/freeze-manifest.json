@@ -1,0 +1,103 @@
+{
+  "status": "frozen_pre_output",
+  "files": {
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/completeness-critic-prompt.txt": {
+      "bytes": 894,
+      "sha256": "d123b3eb36f49f89fa16aa53e02fb69beed91b2d1235e813cba4c7c1198fc81c"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/completeness-critic-schema.json": {
+      "bytes": 711,
+      "sha256": "61a2494d2c108222ef70dfeceb31c025f40fda178f57c3897e89958503a59532"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/critic-manifest.json": {
+      "bytes": 851,
+      "sha256": "421acc08c6502421f47b1da209b6812afcd835adab3416bea601bc5f6ea5222d"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/gates.json": {
+      "bytes": 787,
+      "sha256": "935de33053deeeeedc385256833c7caa1b6685d1d8077fb73bbd48e79125d045"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/issue-spec.md": {
+      "bytes": 6433,
+      "sha256": "a3f32ba510a62ecfb6b475d6eddcbbdbd81a350e7dfa911916c29534c07aee33"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/population-manifest.json": {
+      "bytes": 1416,
+      "sha256": "7b69187f9cb9817bac72f14d7834867a730040faa2c5e08920f5fe268b797be9"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/requirements.lock": {
+      "bytes": 41529,
+      "sha256": "b7d36b78115e236b8f0797246459f3315b394606b5af274d37cfa9c43bb2e585"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/reviewer-attempt-ledger.json": {
+      "bytes": 33,
+      "sha256": "b434fe4b4f4ae5e8b2d405c5706c08dec07ebdd1babc244fd48733fd66484b9f"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/scripts/build_population.py": {
+      "bytes": 20826,
+      "sha256": "15529d14b0bc80f97eb0b57d4cc5777406a4886b48887d7bfaccd8af4a2af716"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/support-critic-prompt.txt": {
+      "bytes": 778,
+      "sha256": "8dfc83cf0be96dbb8d2ffcbe2e6504affc9b8f0719e2c5d4c1582fee3685e792"
+    },
+    ".cs/epics/001-o-offline-commit-flow/artifacts/037/support-critic-schema.json": {
+      "bytes": 697,
+      "sha256": "14dc0dfa2adc9775e55bc2e331890343ea8a2f81dae094595903acab6a03c51d"
+    }
+  },
+  "population": {
+    "status": "frozen_pre_output",
+    "seed": 37,
+    "population": 200,
+    "counts": {
+      "source_rows": 204336,
+      "message": 15880,
+      "incomplete_or_size": 6768,
+      "excluded_near_overlap": 21460,
+      "ungrounded_heuristic": 112916,
+      "accepted": 27054,
+      "sensitive": 10006,
+      "sensitive_ipv4": 4831,
+      "excluded_identity": 8000,
+      "excluded_family": 336,
+      "too_many_tokens": 303,
+      "sensitive_email": 4101,
+      "sensitive_home_path_pii": 1164,
+      "excluded_v2_overlap": 1314,
+      "sensitive_assigned_secret": 190,
+      "duplicate_target": 299,
+      "sensitive_basic_auth_url": 241,
+      "sensitive_private_key": 80,
+      "sensitive_aws_key": 26
+    },
+    "bin_counts": {
+      "large": 60,
+      "medium": 100,
+      "single": 40
+    },
+    "body_required": 71,
+    "high_token": 51,
+    "near_limit_found": true,
+    "over_limit_found": true,
+    "population_sha256": "67a1612ff71c6548a8e29c892cb91afaf651861d71fb2344d7373401acdedea7",
+    "exclusion_counts": {
+      "repos": 10,
+      "repo_groups": 10,
+      "commits": 8066,
+      "diffs": 8251,
+      "patches": 8245,
+      "changed_pairs": 225401,
+      "targets": 8066,
+      "target_pairs": 89882,
+      "families": 8336,
+      "v2_hashes": 626,
+      "v2_keys": 5596
+    },
+    "over_limit_case": {
+      "family": "commitchronicle:ephemerality/xray-builder.gui:792444d08719a23cf8ccd4882d82c7b079cbea3b",
+      "tokens": 8757,
+      "file": "/tmp/cnm-pierce37/data/over-limit-case.json"
+    }
+  }
+}

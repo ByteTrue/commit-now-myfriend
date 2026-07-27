@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["decision", "reason_codes", "evidence"],
+  "properties": {
+    "decision": {"enum": ["accept", "reject"]},
+    "reason_codes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {"enum": ["none", "misses_primary_change", "miscenters_secondary_change", "multi_change_incomplete", "body_required_missing", "generic_or_vague"]}
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 240}
+    }
+  }
+}

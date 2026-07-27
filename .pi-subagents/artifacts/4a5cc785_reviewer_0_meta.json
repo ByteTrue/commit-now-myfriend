@@ -1,0 +1,182 @@
+{
+  "runId": "4a5cc785",
+  "agent": "reviewer",
+  "task": "复审修正后的 `/tmp/cnm-train31/data/{train,valid,test}.jsonl` 与 manifest。必须复用上一轮固定方法：seed `cnm-31-review-v1`，每个 split 按 `SHA-256(seed + '\\0' + family)` 升序取 20 family、每 family 再按同法选 1 variant，总计 60 条；逐条检查 target 是否由 diff 支持、subject 完整、style/guidance 遵从、是否有 secret/幻觉/机械坏样本。全量复查 split/repo/family/diff 交集、manifest hash，并确认上一轮列出的 7 个具体坏例不再出现。也检查全部 custom bullet target 的两条 changed-file bullet 是否确由 diff 路径支持。不要修改文件。按 blocker/high/medium/low 输出，给明确 GO/STOP。\n\n---\n**Output:**\nWrite your findings to exactly this path: /tmp/cnm-train31/data-review-v2.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.",
+  "exitCode": 0,
+  "usage": {
+    "input": 21,
+    "output": 5031,
+    "cacheRead": 129581,
+    "cacheWrite": 41968,
+    "cost": 0.47812550000000004,
+    "turns": 7
+  },
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": true,
+      "exitCode": 0,
+      "usage": {
+        "input": 21,
+        "output": 5031,
+        "cacheRead": 129581,
+        "cacheWrite": 41968,
+        "cost": 0.47812550000000004,
+        "turns": 7
+      }
+    }
+  ],
+  "durationMs": 72738,
+  "toolCount": 12,
+  "acceptance": {
+    "status": "checked",
+    "explicit": true,
+    "effectiveAcceptance": {
+      "level": "checked",
+      "explicit": true,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "changed-files",
+        "tests-added",
+        "commands-run",
+        "residual-risks",
+        "no-staged-files"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "criterion:criterion-1",
+        "status": "passed",
+        "message": "Required criterion 'criterion-1' satisfied."
+      },
+      {
+        "id": "evidence:changed-files",
+        "status": "passed",
+        "message": "changed-files evidence present."
+      },
+      {
+        "id": "evidence:tests-added",
+        "status": "not-applicable",
+        "message": "tests-added evidence explicitly reported as not applicable."
+      },
+      {
+        "id": "evidence:commands-run",
+        "status": "passed",
+        "message": "commands-run evidence present."
+      },
+      {
+        "id": "evidence:residual-risks",
+        "status": "passed",
+        "message": "residual-risks evidence present."
+      },
+      {
+        "id": "evidence:no-staged-files",
+        "status": "passed",
+        "message": "no-staged-files evidence present."
+      },
+      {
+        "id": "no-staged-files",
+        "status": "passed",
+        "message": "No staged files detected."
+      }
+    ],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "按固定 SHA-256 方法逐条复核 60 条，并定位 blocker 于 /tmp/cnm-train31/data/valid.jsonl:125；同时全量验证 split 交集、manifest hash、旧 7 例和 6 条 custom bullet target。"
+        }
+      ],
+      "changedFiles": [
+        "/tmp/cnm-train31/data-review-v2.md"
+      ],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "python3 audit_dataset.py",
+          "result": "failed",
+          "summary": "系统 Python 缺少 pyarrow；随后使用该项目 venv 成功复跑。"
+        },
+        {
+          "command": "python3 inline fixed-hash sampler and full split/hash/old-example/custom-bullet audit",
+          "result": "passed",
+          "summary": "固定抽出 60 条；交集全为 0，旧 7 个坏内容命中为 0，6 条 custom bullet 的两条路径均受 diff 支持，三个 split hash 均匹配 manifest。"
+        },
+        {
+          "command": "venv/bin/python audit_dataset.py",
+          "result": "passed",
+          "summary": "全量 1,120 条返回 ok=true、errors=[]；记录数 840/140/140，family 数 210/35/35。"
+        },
+        {
+          "command": "git -C /Users/byte/workspace/projects/commit-now-myfriend diff --cached --quiet",
+          "result": "passed",
+          "summary": "确认当前仓库无 staged files；已有未暂存工作树内容未被本次只读数据审查修改。"
+        }
+      ],
+      "validationOutput": [
+        "60 个固定样本中 59 条通过，1 条 valid target 不受 diff 支持",
+        "train/valid/test 的 repo/family/diff/target 两两交集均为 0",
+        "manifest 中三个 split SHA-256 全部匹配",
+        "上一轮 7 个具体坏内容全量命中均为 0",
+        "全部 6 条 custom bullet target 的两条文件 bullet 均对应真实 diff 路径",
+        "全量 audit_dataset.py: ok=true, errors=[]"
+      ],
+      "residualRisks": [
+        "内置 secret scan 是模式规则检查，不能证明不存在所有未知格式的敏感信息",
+        "本次固定 60 条之外的 target 主要依赖全量机械审计，未逐条人工语义复核全部 1,120 条"
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "仅写入本次复审报告；未修改 train/valid/test、families 或 manifest。",
+      "reviewFindings": [
+        "blocker: /tmp/cnm-train31/data/valid.jsonl:125 - target 声称实现 EntityStorage 单测，但 diff 只移动已有 put 测试、添加 @Throws 并调整空行；建议 STOP",
+        "high: no findings",
+        "medium: no findings",
+        "low/correct: split 隔离、manifest hash、旧 7 例清除和全部 custom bullet 路径检查通过"
+      ],
+      "manualNotes": "明确结论 STOP；修正该 valid family 并用相同 seed/method 复跑后再考虑 GO。"
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/4a5cc785_reviewer_0_transcript.jsonl",
+  "timestamp": 1784952803632
+}

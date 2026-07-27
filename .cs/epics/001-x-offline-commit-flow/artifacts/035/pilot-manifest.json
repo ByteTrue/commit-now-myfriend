@@ -1,0 +1,125 @@
+{
+  "status": "frozen_pre_output",
+  "seed": 350725,
+  "source": {
+    "dataset": "JetBrains-Research/commit-chronicle",
+    "revision": "5fd076e67b812a9f3d1999e5e40f71715f84bb51",
+    "files": {
+      "commit-chronicle-00.parquet": "fadd63f1b896e992d75bb37b9fb5045db1dc2e3b53c749d1ef7e30996ccf117f",
+      "commit-chronicle-01.parquet": "405a203bc196f99d25cb31e25cb99f8dc3435dca8407ea843cb731441c12cbdd"
+    },
+    "license_policy": [
+      "Apache License 2.0",
+      "BSD 3-Clause New or Revised License",
+      "MIT License"
+    ],
+    "columns_read": [
+      "repo",
+      "hash",
+      "language",
+      "license",
+      "mods"
+    ],
+    "source_message_read": false
+  },
+  "limits": {
+    "max_input_tokens": 8192,
+    "max_files": 8,
+    "repo_group_cap": 3
+  },
+  "targets": {
+    "file_bins": {
+      "single": 40,
+      "two_three": 100,
+      "four_eight": 60
+    },
+    "high_token": 50,
+    "body_required": 60,
+    "families": 200
+  },
+  "filters": {
+    "source_rows": 204336,
+    "eligible": 174678,
+    "incomplete_or_size": 7278,
+    "sensitive": 11821,
+    "sensitive_ipv4": 5707,
+    "file_count": 9179,
+    "excluded_identity": 360,
+    "over_limit": 996,
+    "sensitive_email": 4913,
+    "sensitive_home_path_pii": 1273,
+    "sensitive_assigned_secret": 210,
+    "sensitive_basic_auth_url": 264,
+    "sensitive_aws_key": 29,
+    "excluded_overlap": 24,
+    "sensitive_private_key": 75,
+    "sensitive_github_token": 1,
+    "near_duplicate": 3135
+  },
+  "stats": {
+    "families": 200,
+    "repositories": 126,
+    "repository_groups": 126,
+    "file_bins": {
+      "two_three": 100,
+      "single": 40,
+      "four_eight": 60
+    },
+    "high_token_inputs": 88,
+    "near_limit_inputs": 7,
+    "body_required": 60,
+    "languages": {
+      "PHP": 8,
+      "Go": 23,
+      "TypeScript": 12,
+      "C++": 22,
+      "Rust": 29,
+      "JavaScript": 8,
+      "C#": 14,
+      "Ruby": 5,
+      "Elixir": 3,
+      "Python": 13,
+      "Shell": 10,
+      "C": 13,
+      "Objective-C": 4,
+      "Swift": 11,
+      "Java": 12,
+      "Groovy": 4,
+      "Kotlin": 8,
+      "Smalltalk": 1
+    },
+    "licenses": {
+      "MIT License": 91,
+      "BSD 3-Clause New or Revised License": 17,
+      "Apache License 2.0": 92
+    },
+    "token_min": 438,
+    "token_max": 8182,
+    "token_mean": 2958.34
+  },
+  "outputs": {
+    "pilot_200_sha256": "a687322106fedabab5f0d3c187b0e08a423dc5fb391d6c8dde693c7687b568a5",
+    "over_limit_sha256": "3350f89b8e8a52ba9a884b5c7b0eef6d8658f07990d3e51d717f0762a0f7bd72",
+    "audit_plan_sha256": "ed24c7da4385cc75efa90ee55ad2ffef9b0c955a34a9f6f1cc97d48365862f79"
+  },
+  "inputs": {
+    "prompt_sha256": "38b36702616f892ad2e1523ff01e80193fc1972f53d84032ca9a6352c250a25e",
+    "schema_sha256": "facaee4e9f63028756b640bed1ce7ce9f3393a227a743a1eb4d2a8d8812bf173",
+    "shadow_manifest_sha256": "0fa8dc40531cc95188b93ff0fee5197d3f60eea14f141bb0cd8ccae83c58c976",
+    "public_regression_sha256": "fdd9d4e587a913187ee849b2ba62bafbb3c5ea53058269b9278e6f6fa3a4175f",
+    "public_manifest_sha256": "b40fc1ac1b4fbc56bd259f15dfa3860915203d43a895d72400d9efd764027015",
+    "prior_audit_exclusions_sha256": "212f14743d53003a40a11a23ee995334caf7c5ed3407f6bfe6cc7a7252106cf4",
+    "leakage_v2_exclusions_sha256": "d0b4f358e5e3bb5557ca18750ae05ce37890953459189e3bce4c4b76a88ea601",
+    "tokenizer_manifest_sha256": "4864e3897a5161145874397080b8ba7e85eb0ba01dc4fa8a0e16d617fcc8d5b5",
+    "build_dataset_034_sha256": "c869224d2dc0864b2c68a849971e15315cfd9bb04dcd5f5b1c03cdef78ffdb10",
+    "pipeline_034_sha256": "1cffe1b5c1fd40f86af044b279b590cea525893f1d23c997964fbeff756b30de",
+    "build_pilot_sha256": "8de1fe365ba9cc0c8834d00f56597282c2cd9d35305ae3880c5f098b8685b8de",
+    "leakage_v2_code_sha256": "2a16359ae98208f9e30088e581fa15a1488d9403591c4d3b6e69741f1c4fe6f0"
+  },
+  "prior_audit_exclusions": {
+    "families": 360,
+    "reason": "excludes all 160 first-audit reviewed rows and all 200 rows in the redesigned frozen audit"
+  },
+  "teacher_output_guard": "builder refuses to run when labels directory is non-empty",
+  "pilot_role": "evaluation_only_never_student_training"
+}

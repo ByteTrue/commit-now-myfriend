@@ -1,0 +1,28 @@
+{
+  "status": "frozen_pre_output",
+  "review_input": ["opaque_index", "complete_diff", "body_policy", "teacher_target", "teacher_evidence"],
+  "reviewer_must_not_receive": ["repository_identity", "commit_sha", "source_commit_message", "other_reviewer_scores", "teacher_model_identity", "aggregate_progress"],
+  "per_record": {
+    "critical_error": "boolean; true for any materially unsupported, contradictory, wrong-primary-intent, invented, or omitted-core-change label",
+    "fully_grounded": "boolean; every material subject/body claim follows from the complete diff",
+    "subject_quality": "integer 0..2; 2 means specific, useful, concise, and centered on the primary change",
+    "body_quality": "integer 0..2 or null; required cases need useful grounded detail beyond the subject",
+    "evidence_quality": "integer 0..2; 2 means cited changed-line excerpts directly support all material claims",
+    "reason": "short evidence-based explanation"
+  },
+  "whole_pilot_gate": {
+    "critical_errors_from_either_reviewer": 0,
+    "fully_grounded_by_both_min": 190,
+    "subject_quality_2_by_both_min": 180,
+    "body_required_useful_by_both": 60,
+    "body_quality_2_by_both_min": 54,
+    "mechanical_validation_failures": 0,
+    "near_limit_smoke": "pass",
+    "over_limit_rejected_before_inference": true,
+    "frozen_local_teacher_owned_smoke_and_full": true,
+    "independent_bound_reviewer_provenance": true
+  },
+  "post_score_repairs": 0,
+  "post_score_resampling": 0,
+  "prompt_redesigns": 0
+}

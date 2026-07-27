@@ -1,0 +1,43 @@
+{
+  "status": "frozen_pre_review",
+  "instructions_sha256": "520e5ad487bd917b92566b1c3af73ac57d11f3e74554ee6ebdb2b2134ce54388",
+  "rubric_sha256": "e5699ac8b3ed87b21e92306e4ee397174630f6e3e355be1672822b8b08848a96",
+  "validation_sha256": "12590f5b86780b3a143fd9790fd0c355c849c4311c7ba690f7c850b8ded8b319",
+  "slices": {
+    "reviewer-a-slice-00.jsonl": "f9216e8af5d7d118bfef650845bb4378fd998d4a7f6745c100a5bd71143eaf58",
+    "reviewer-a-slice-01.jsonl": "11caf5a8ed5d1c0f9bdd9f96bb106dd43937e66cbb75d2485a9508d1ae1315fe",
+    "reviewer-a-slice-02.jsonl": "8b263b4a78b5d84d35eb22b701617df5158ffc7bb3bf63af98828d5b13d6acb0",
+    "reviewer-a-slice-03.jsonl": "affd35390623103e5d3b3081c9a9f8053ff5c51cbe9ade41791cf4a9b455b1c1",
+    "reviewer-a-slice-04.jsonl": "89e433bbde4927514a07cfa906f4514a28f11f6b05fb27fbe8a58fe560d17d4e",
+    "reviewer-a-slice-05.jsonl": "6cef45754bb2093dcf6347ec74d059fd351c210cd707e593d1f54bb0b7f874a2",
+    "reviewer-a-slice-06.jsonl": "88fc5bf8b31dd67864c465a6aeed3255afb115997a00d0887f9af961a2128046",
+    "reviewer-a-slice-07.jsonl": "951e328258e7ccd3b86beb9e25ee1184f9e8e27d6bf701fcdf65dd4df84faad9",
+    "reviewer-a-slice-08.jsonl": "ce425c205759159743b6e5fbd77225a06e4c2b41df8ca0e9e18f45bceffda78b",
+    "reviewer-a-slice-09.jsonl": "a73f032c1334d8fdc03444a4479659362f0fb8159b510f51196c9bb3e677d04c",
+    "reviewer-b-slice-00.jsonl": "ff9c0b1df5a945cc952e52df3661341af88ecf468af4f0698e293f8b07cfbe9c",
+    "reviewer-b-slice-01.jsonl": "6a0c8674dbe95b6d89b0e085bdbc513c329db978ea020a89913a6c8607e0cb3e",
+    "reviewer-b-slice-02.jsonl": "d3355595d8542478c6af4004ba55e738b151b80f503bc9d0c491e64d364692a1",
+    "reviewer-b-slice-03.jsonl": "d0eb510848171ab3aafb14706df46482c6b60950c5184591591c363f517edb2f",
+    "reviewer-b-slice-04.jsonl": "0f033dc629474851acfbb9e4a32ea5896d7113b6e638c55efce49520bf7f03ef",
+    "reviewer-b-slice-05.jsonl": "532f64f026d9961c660734f44652dbd62934519f098654fdf0ea0520856f3983",
+    "reviewer-b-slice-06.jsonl": "145c31e08d84706a6bdc78ab64f0fb5c8c2f7814e0724ba62d79ee09c70ad027",
+    "reviewer-b-slice-07.jsonl": "2c2fb45c899f9ee45d354d6ca3c012c8d4e8bebad33a326f0013bf75c8926f5d",
+    "reviewer-b-slice-08.jsonl": "c98e956c9cc1698e5d8ddaab46be936839231bf8450efa98cf3ac963427895b3",
+    "reviewer-b-slice-09.jsonl": "5db7a6c7b85cb879c15c1070c4e90732b3547b45edf9b4b46f8f3e807d62863a"
+  },
+  "reviewer_inputs": [
+    "opaque_index",
+    "complete_diff",
+    "body_policy",
+    "teacher_target",
+    "teacher_evidence"
+  ],
+  "withheld": [
+    "repository_identity",
+    "commit_sha",
+    "source_commit_message",
+    "other_scores",
+    "teacher_model_identity",
+    "aggregate_progress"
+  ]
+}

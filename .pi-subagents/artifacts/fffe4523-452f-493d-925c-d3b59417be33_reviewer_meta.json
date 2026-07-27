@@ -1,0 +1,127 @@
+{
+  "runId": "fffe4523-452f-493d-925c-d3b59417be33",
+  "agent": "reviewer",
+  "task": "Pre-output audit of GitHub #35 and `.cs/epics/001-o-offline-commit-flow/artifacts/035/`. Read issue #35, Epic relevant section, all 035 manifests/prompts/rubrics/scripts, and the frozen pilot/manifest under `/tmp/cnm-pierce35/data`. Do not edit anything and do not inspect source commit messages. Find only blockers that could create a false GO, violate the user's approved constraints, leak prior evaluation data, make the pilot non-reproducible, or invalidate independent double-blind review. Verify actual scripts against issue claims. Report concise severity-ranked findings with exact paths/lines and a GO/FIX-BEFORE-OUTPUT verdict. This review itself occurs before freeze/teacher output.\n\n## Acceptance Contract\nAcceptance level: attested\nCompletion is not accepted from prose alone. End with a structured acceptance report.\n\nCriteria:\n- criterion-1: Return concrete findings with file paths and severity when applicable\n\nRequired evidence: review-findings, residual-risks\n\nFinish with a fenced JSON block tagged `acceptance-report` in this shape:\nUse empty arrays when no items apply; array fields contain strings unless object entries are shown.\n`criteriaSatisfied[].status` must be exactly one of: satisfied, not-satisfied, not-applicable.\n`commandsRun[].result` must be exactly one of: passed, failed, not-run.\n`manualNotes` and `notes` are optional strings; an empty string means no note and does not satisfy `manual-notes` evidence.\n```acceptance-report\n{\n  \"criteriaSatisfied\": [\n    {\n      \"id\": \"criterion-1\",\n      \"status\": \"satisfied\",\n      \"evidence\": \"specific proof\"\n    }\n  ],\n  \"changedFiles\": [\n    \"src/file.ts\"\n  ],\n  \"testsAddedOrUpdated\": [\n    \"test/file.test.ts\"\n  ],\n  \"commandsRun\": [\n    {\n      \"command\": \"command\",\n      \"result\": \"passed\",\n      \"summary\": \"short result\"\n    }\n  ],\n  \"validationOutput\": [\n    \"validation output or concise summary\"\n  ],\n  \"residualRisks\": [\n    \"none\"\n  ],\n  \"noStagedFiles\": true,\n  \"diffSummary\": \"short description of the diff\",\n  \"reviewFindings\": [\n    \"blocker: file.ts:12 - issue found, or no blockers\"\n  ],\n  \"manualNotes\": \"anything else the parent should know\"\n}\n```",
+  "exitCode": 0,
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": true,
+      "exitCode": 0,
+      "usage": {
+        "input": 18,
+        "output": 7530,
+        "cacheRead": 244833,
+        "cacheWrite": 84194,
+        "cost": 0.874619,
+        "turns": 6
+      }
+    }
+  ],
+  "acceptance": {
+    "status": "attested",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "Severity-ranked blockers cite exact paths and lines, including prepare_audit.py:49-53, merge_scores.py:40-68, label_pilot.py:33 and 74-86, build_dataset.py:162-174, and freeze.py:12-38."
+        }
+      ],
+      "changedFiles": [],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "gh issue view 35 --repo ByteTrue/commit-now-myfriend --json number,title,body,labels,state,url",
+          "result": "passed",
+          "summary": "Retrieved and reviewed the live issue specification."
+        },
+        {
+          "command": "Python structural and SHA-256 checks over /tmp/cnm-pierce35/data",
+          "result": "passed",
+          "summary": "Confirmed manifest hashes, 200 unique cases, required coverage, and complete reviewer permutations."
+        },
+        {
+          "command": "python3 -m unittest discover -s .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts -p 'test_*.py' -v",
+          "result": "failed",
+          "summary": "Two audit tests passed; pilot and teacher tests could not import pyarrow under system Python 3.14."
+        },
+        {
+          "command": "python3 -m py_compile .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/*.py",
+          "result": "passed",
+          "summary": "All 035 scripts compiled successfully."
+        }
+      ],
+      "validationOutput": [
+        "Frozen hashes match pilot-manifest.json.",
+        "Pilot has 200 unique indices/families/diffs, file bins 40/100/60, 88 high-token cases, seven near-limit cases, and 60 body-required cases.",
+        "Reviewer A and B plans each cover all 200 indices exactly once.",
+        "67 pilot rows contain 116 headerless file sections omitted by the near-duplicate changed-line signature."
+      ],
+      "residualRisks": [
+        "Frozen Python 3.12.13 test environment was unavailable, so the full suite was not executed in the attested environment.",
+        "Final teacher GGUF is not yet present; only partial download files exist.",
+        "No source commit messages were inspected."
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "Review-only; no files changed. Existing unrelated unstaged and untracked work was left untouched.",
+      "reviewFindings": [
+        "critical: .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/prepare_audit.py:49-53 - reviewer artifacts expose repository and commit identity, enabling source-message lookup.",
+        "critical: .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/merge_scores.py:40-52 - the same score set can be counted as both independent reviewers.",
+        "high: .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/merge_scores.py:60-68 - GO omits mechanical, useful-body, near-limit, smoke, and over-limit gates.",
+        "high: .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/label_pilot.py:33,74-86 - arbitrary endpoint/model can generate labels without frozen teacher attestation.",
+        "high: .cs/epics/001-o-offline-commit-flow/artifacts/034/scripts/build_dataset.py:162-174 - headerless changed content is omitted from near-duplicate leakage signatures.",
+        "high: .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/freeze.py:12-38 - imported selection code and tokenizer inputs are not frozen."
+      ],
+      "manualNotes": "Verdict: FIX-BEFORE-OUTPUT."
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/fffe4523-452f-493d-925c-d3b59417be33_reviewer_transcript.jsonl",
+  "skills": [],
+  "timestamp": 1784978747582
+}

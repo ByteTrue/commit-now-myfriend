@@ -1,0 +1,53 @@
+{
+  "issue": "https://github.com/ByteTrue/commit-now-myfriend/issues/34",
+  "frozen_at": "2026-07-25T16:15:00+08:00",
+  "base": {
+    "repo": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+    "revision": "ea3f2471cf1b1f0db85067f1ef93848e38e88c25",
+    "license": "Apache-2.0",
+    "parameters": 494032768
+  },
+  "training_base": {
+    "repo": "mlx-community/Qwen2.5-Coder-0.5B-Instruct-bf16",
+    "revision": "89cbb0caaa52fc80ce8a8a3a015abdc5b35d9ecc",
+    "model_bytes": 988097734,
+    "model_sha256": "b514850795f9d051c503e59063112a9b5e59957aeef106850139c6eb2b00a7f3"
+  },
+  "reference_quant": {
+    "repo": "Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF",
+    "revision": "ebb201c5531a8055c86ba0317f2e38c360d72e26",
+    "file": "qwen2.5-coder-0.5b-instruct-q5_k_m.gguf",
+    "bytes": 522186624,
+    "sha256": "7f6a0b1670c9fff2cccbf8746dff19bb9c023708c8ca7702e4d49805985ecbac"
+  },
+  "data": {
+    "repo": "JetBrains-Research/commit-chronicle",
+    "revision": "5fd076e67b812a9f3d1999e5e40f71715f84bb51",
+    "target_families": {"train": 6000, "valid": 1000, "test": 1000},
+    "seed": "cnm-34-v1"
+  },
+  "limits": {
+    "complete_installed_bytes": 700000000,
+    "model_context_tokens": 32768,
+    "product_prompt_tokens": 16000,
+    "generated_tokens": 256,
+    "training_sequence_tokens": 8192,
+    "training_configurations": 2
+  },
+  "decode": {
+    "do_sample": false,
+    "temperature": 0,
+    "top_p": 1,
+    "top_k": 0,
+    "repeat_penalty": 1,
+    "seed": 424242
+  },
+  "quality": {
+    "public_regression_cases": 26,
+    "shadow_minimum_cases": 30,
+    "shadow_minimum_full": 28,
+    "shadow_maximum_zero": 0,
+    "guidance_and_required_body": "all",
+    "historical_minimum_full_ratio": 0.9
+  }
+}

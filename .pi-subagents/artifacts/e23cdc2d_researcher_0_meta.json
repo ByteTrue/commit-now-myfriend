@@ -1,0 +1,136 @@
+{
+  "runId": "e23cdc2d",
+  "agent": "researcher",
+  "task": "[Read from: /Users/byte/workspace/projects/commit-now-myfriend/.cs/epics/001-o-offline-commit-flow/spec.md]\n\nRead-only research for GitHub issue #30 in ByteTrue/commit-now-myfriend. Find the smallest credible locally runnable model/runtime candidates as of 2026-07 for git diff -> commit message with instruction following, seven configurable styles, arbitrary custom guidance, and optional multiline body. Hard ceiling complete installed bundle 300 MB. Prefer GGUF + llama.cpp or similarly redistributable static runtime. For each candidate report exact parameter/quantized file sizes, license/redistribution status from primary sources, architecture/runtime support, and likely quality risk. Pay special attention to hks350d/git-diff-to-commit-gemma-3-270m, Gemma license obligations, and whether Q8 can be requantized to Q4. No edits or issue comments. Return source URLs.\n\n---\n**Output:**\nWrite your findings to exactly this path: /Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/outputs/e23cdc2d/research.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.",
+  "exitCode": 1,
+  "usage": {
+    "input": 15,
+    "output": 4972,
+    "cacheRead": 76724,
+    "cacheWrite": 36388,
+    "cost": 0.41502200000000006,
+    "turns": 5
+  },
+  "model": "bytetrueapi/gpt-5.6-sol:medium",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:medium"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:medium",
+      "success": false,
+      "exitCode": 1,
+      "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+      "usage": {
+        "input": 15,
+        "output": 4972,
+        "cacheRead": 76724,
+        "cacheWrite": 36388,
+        "cost": 0.41502200000000006,
+        "turns": 5
+      }
+    }
+  ],
+  "durationMs": 102887,
+  "toolCount": 11,
+  "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+  "acceptance": {
+    "status": "attested",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "review-findings identify concrete candidate repositories/artifact names and severity; residual-risks enumerate the missing exact hks350d bytes, model-quality proof, runtime size, and Gemma legal review"
+        }
+      ],
+      "changedFiles": [
+        "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/outputs/e23cdc2d/research.md"
+      ],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "read .cs/epics/001-o-offline-commit-flow/spec.md",
+          "result": "passed",
+          "summary": "Confirmed 300 MB installed ceiling and seven-style/custom/multiline requirements."
+        },
+        {
+          "command": "focused web searches across model repositories, primary licenses, and llama.cpp quantization docs",
+          "result": "passed",
+          "summary": "Screened Gemma task fine-tune, Gemma base, SmolLM2, Qwen2.5-Coder, licensing, runtime support, and requantization."
+        },
+        {
+          "command": "fetch full source pages / Hugging Face repository API",
+          "result": "not-run",
+          "summary": "Required fetch_content/get_search_content tools were unavailable in this child configuration."
+        }
+      ],
+      "validationOutput": [
+        "Qwen2.5-Coder Q4_K_M is 0.40 GB and fails the 300 MB ceiling before runtime.",
+        "SmolLM2-135M-Instruct Q4_K_M listing is 105 MB and Apache-2.0.",
+        "Gemma Q8 raw-weight estimate leaves no runtime margin; Q4 must be generated and measured exactly.",
+        "No source establishes seven-style/custom-guidance/multiline quality; corpus evaluation remains mandatory."
+      ],
+      "residualRisks": [
+        "blocker: hks350d repository exact artifact byte counts and pinned file paths remain unverified because full-content/API tools were unavailable",
+        "high: no candidate is yet quality-attested for seven styles, arbitrary custom guidance, and optional multiline bodies",
+        "medium: Gemma custom-license flow-down and prohibited-use obligations need release/legal approval",
+        "medium: Q8-to-Q4 requantization may reduce quality versus direct BF16/F16-to-Q4 conversion",
+        "medium: exact stripped llama.cpp per-platform installed size has not been built or measured"
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "Read-only model/runtime research; only the required external research artifact was written.",
+      "reviewFindings": [
+        "blocker: hks350d/git-diff-to-commit-gemma-3-270m - do not select a bundle until exact pinned GGUF bytes are measured",
+        "blocker: Gemma 3 270M Q8 - theoretical weights alone consume approximately 287 MB, so complete bundle cannot credibly stay under 300 MB",
+        "high: all candidates - seven-style/custom-guidance/multiline behavior lacks empirical evidence",
+        "medium: Gemma-derived candidates - redistribution carries custom Gemma Terms obligations",
+        "no source-code findings; task was research-only"
+      ],
+      "manualNotes": "The artifact distinguishes exact published listing sizes from theoretical estimates and explicitly reports the unavailable fetch-tool configuration rather than claiming full-page verification."
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/e23cdc2d_researcher_0_transcript.jsonl",
+  "timestamp": 1784916686418
+}

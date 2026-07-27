@@ -1,0 +1,23 @@
+{
+  "status": "frozen_pre_output",
+  "population": 200,
+  "file_bins": {"single": 40, "medium": 100, "large": 60},
+  "high_token_minimum": 50,
+  "body_required": 60,
+  "repo_cap": 2,
+  "student_token_limit": 8192,
+  "near_limit_minimum": 7600,
+  "yield": {"total": 100, "single": 20, "medium": 50, "large": 30, "high_token": 25, "body_required": 30},
+  "accepted_semantic_gate": {
+    "critical_union": 0,
+    "fully_grounded_both_ratio": 0.95,
+    "subject_quality_2_both_ratio": 0.90,
+    "all_required_bodies_useful": true,
+    "required_body_quality_2_both_ratio": 0.90
+  },
+  "review_all_population_rows": true,
+  "critic_disagreement_means_reject": true,
+  "malformed_timeout_or_missing_means_reject": true,
+  "post_output_mutations_allowed": 0,
+  "reviewer_attempts_allowed": 2
+}

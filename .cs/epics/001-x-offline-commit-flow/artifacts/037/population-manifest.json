@@ -1,0 +1,54 @@
+{
+  "status": "frozen_pre_output",
+  "seed": 37,
+  "population": 200,
+  "counts": {
+    "source_rows": 204336,
+    "message": 15880,
+    "incomplete_or_size": 6768,
+    "excluded_near_overlap": 21460,
+    "ungrounded_heuristic": 112916,
+    "accepted": 27054,
+    "sensitive": 10006,
+    "sensitive_ipv4": 4831,
+    "excluded_identity": 8000,
+    "excluded_family": 336,
+    "too_many_tokens": 303,
+    "sensitive_email": 4101,
+    "sensitive_home_path_pii": 1164,
+    "excluded_v2_overlap": 1314,
+    "sensitive_assigned_secret": 190,
+    "duplicate_target": 299,
+    "sensitive_basic_auth_url": 241,
+    "sensitive_private_key": 80,
+    "sensitive_aws_key": 26
+  },
+  "bin_counts": {
+    "large": 60,
+    "medium": 100,
+    "single": 40
+  },
+  "body_required": 71,
+  "high_token": 51,
+  "near_limit_found": true,
+  "over_limit_found": true,
+  "population_sha256": "67a1612ff71c6548a8e29c892cb91afaf651861d71fb2344d7373401acdedea7",
+  "exclusion_counts": {
+    "repos": 10,
+    "repo_groups": 10,
+    "commits": 8066,
+    "diffs": 8251,
+    "patches": 8245,
+    "changed_pairs": 225401,
+    "targets": 8066,
+    "target_pairs": 89882,
+    "families": 8336,
+    "v2_hashes": 626,
+    "v2_keys": 5596
+  },
+  "over_limit_case": {
+    "family": "commitchronicle:ephemerality/xray-builder.gui:792444d08719a23cf8ccd4882d82c7b079cbea3b",
+    "tokens": 8757,
+    "file": "/tmp/cnm-pierce37/data/over-limit-case.json"
+  }
+}

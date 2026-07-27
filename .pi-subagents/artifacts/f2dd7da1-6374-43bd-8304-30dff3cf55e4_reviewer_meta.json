@@ -1,0 +1,80 @@
+{
+  "runId": "f2dd7da1-6374-43bd-8304-30dff3cf55e4",
+  "agent": "reviewer",
+  "task": "你是 #33 的独立盲评审。不要读取本会话、GitHub issue、模型身份、自动检查结果或之前 #30/#31/#32 的结果；只读取 `/tmp/cnm-pierce33/eval/blind-review-input.jsonl`。该文件有 26 行，每行包含 frozen system/user diff、style、guidance、expect_body 与候选 output。\n\n逐项按以下冻结尺度评审 output：\n- 2：准确且足够完整地概括实际变更，没有虚构的实质行为；\n- 1：与变更实质相关，但不完整、过宽或不精确；\n- 0：错误、空、复述代码/diff、实质虚构或不可用。\n同时分别判断：非空 guidance 是否真正满足；expect_body=true 时是否存在 `subject + blank line + useful body`；Conventional/Angular 的 subject 格式是否符合该行 system 要求；是否出现 Markdown 包裹、解释、重复或代码/diff echo。不要因为语法流畅而提高语义分；有疑问取较低分。\n\n必须把完整报告写到 `/tmp/cnm-pierce33/eval/semantic-review.md`，每个 case 一行表格，列为 id / score / guidance(pass|fail|n/a) / body(pass|fail|n/a) / style(pass|fail) / note。末尾给出精确汇总：score 2/1/0 数量、guidance x/5、required body x/4、Conventional/Angular 格式通过数量，以及是否满足门槛（无0且至少24个2、guidance5/5、body4/4）。不要修改任何输入文件。最后回复同样的简短汇总和报告路径。\n\n---\n**Output:**\nWrite your findings to exactly this path: /tmp/cnm-pierce33/eval/reviewer-response.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.\n\n## Acceptance Contract\nAcceptance level: attested\nCompletion is not accepted from prose alone. End with a structured acceptance report.\n\nCriteria:\n- criterion-1: Return concrete findings with file paths and severity when applicable\n\nRequired evidence: review-findings, residual-risks\n\nFinish with a fenced JSON block tagged `acceptance-report` in this shape:\nUse empty arrays when no items apply; array fields contain strings unless object entries are shown.\n`criteriaSatisfied[].status` must be exactly one of: satisfied, not-satisfied, not-applicable.\n`commandsRun[].result` must be exactly one of: passed, failed, not-run.\n`manualNotes` and `notes` are optional strings; an empty string means no note and does not satisfy `manual-notes` evidence.\n```acceptance-report\n{\n  \"criteriaSatisfied\": [\n    {\n      \"id\": \"criterion-1\",\n      \"status\": \"satisfied\",\n      \"evidence\": \"specific proof\"\n    }\n  ],\n  \"changedFiles\": [\n    \"src/file.ts\"\n  ],\n  \"testsAddedOrUpdated\": [\n    \"test/file.test.ts\"\n  ],\n  \"commandsRun\": [\n    {\n      \"command\": \"command\",\n      \"result\": \"passed\",\n      \"summary\": \"short result\"\n    }\n  ],\n  \"validationOutput\": [\n    \"validation output or concise summary\"\n  ],\n  \"residualRisks\": [\n    \"none\"\n  ],\n  \"noStagedFiles\": true,\n  \"diffSummary\": \"short description of the diff\",\n  \"reviewFindings\": [\n    \"blocker: file.ts:12 - issue found, or no blockers\"\n  ],\n  \"manualNotes\": \"anything else the parent should know\"\n}\n```",
+  "exitCode": 1,
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": false,
+      "exitCode": 1,
+      "error": "Subagent exceeded turn budget after 9 assistant turns (soft limit 6 + grace 2).",
+      "usage": {
+        "input": 27,
+        "output": 6251,
+        "cacheRead": 166792,
+        "cacheWrite": 35259,
+        "cost": 0.49142975,
+        "turns": 9
+      }
+    }
+  ],
+  "error": "Subagent exceeded turn budget after 9 assistant turns (soft limit 6 + grace 2).",
+  "acceptance": {
+    "status": "rejected",
+    "explicit": true,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": true,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "turn-budget",
+        "status": "failed",
+        "message": "Acceptance was not evaluated because the subagent exceeded its turn budget."
+      }
+    ],
+    "verifyRuns": []
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/f2dd7da1-6374-43bd-8304-30dff3cf55e4_reviewer_transcript.jsonl",
+  "skills": [],
+  "timestamp": 1784965163720
+}

@@ -1,0 +1,43 @@
+{
+  "status": "failed_early_and_redesigned",
+  "seed": 340525,
+  "reviewed_rows": 160,
+  "critical_errors": 4,
+  "fully_grounded": 146,
+  "stop_reason": "zero-critical threshold already impossible; remaining 40 base rows and guidance audit were not consumed",
+  "score_hashes": {
+    "base-00.jsonl": "767b3fb7b11311b6e2e0b4edf4aa8daa1c45703816301c2953f635ab9b3b13d5",
+    "base-01.jsonl": "5154931d149e0553a8dea3231bcd52af766b5d49f743344ad2b9ad47a538ea3c",
+    "base-02.jsonl": "2d609ca608b4d9bf94454414cae5509c325a07adaebd55cb6a0d40bdcd616056",
+    "base-03.jsonl": "5e0d21874ae75712f5010e3b4178a79b2c7864083b7d2bf8d2e733ab9ba0a518",
+    "base-04.jsonl": "a5ce4d00fb7ca932f3612cd157f24f9299fa05ae421c1a9efb01bf8646047fe1",
+    "base-05.jsonl": "529c27a0acc91cffb6f5cce42b2c8e53b6c4d87a7479d0867931bf31ce6ee963",
+    "base-06.jsonl": "85543c9aa6e7ed3add29a69ce7273960a92c831c7554c1aa711c2a94b6f9ebe0",
+    "base-07.jsonl": "468ec007c7383eaae5cdc71a3f7e272b5b119983cfb871473707e6e6a2893125"
+  },
+  "redesign": [
+    "seed changed once to 340526",
+    "subject evidence now requires >=80% meaningful-token overlap (all terms for <=4-term subjects)",
+    "unsupported source bodies are removed using per-sentence >=70% evidence",
+    "dangling fixes/closes/resolves fragments are removed",
+    "absolute home-directory usernames are rejected as PII"
+  ],
+  "redesigned_audit": {
+    "status": "failed_early_stop",
+    "seed": 340526,
+    "reviewed_rows": 160,
+    "critical_errors": 1,
+    "fully_grounded": 157,
+    "stop_reason": "zero-critical threshold impossible; no second redesign permitted",
+    "score_hashes": {
+      "base-00.jsonl": "8613547b512068dad25b46d954363c6b07cf380ef25cbf9e9d1278da35710ebf",
+      "base-01.jsonl": "42c03a6abe65f2e7ff82e2f57c0225011163ce987d988708fac636b8862cc393",
+      "base-02.jsonl": "88cc575490357d62de4642ee8c5c4be85172071cbabeda4e31c402561b056eb4",
+      "base-03.jsonl": "268717ee97436608f669b6f686ec37d18168422ecb1e393397e74d999adf18b8",
+      "base-04.jsonl": "441f2aa60b2adba844b22d95edab5e79c91a210f87d4ee5dbf98aba59dadff7d",
+      "base-05.jsonl": "6f1d87c5918d83306616d0b005a39c675b5b73bc7628578d504ce0bdaf5e49fa",
+      "base-06.jsonl": "d685e7301705c1fae47c46aec4719b1582baabdb18d442145da7bebca1a94d65",
+      "base-07.jsonl": "c703a372815f758b08e06115b72c895dd1922c99106abfc1f2ca4044c80797ba"
+    }
+  }
+}

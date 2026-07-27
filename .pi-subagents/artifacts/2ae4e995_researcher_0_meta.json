@@ -1,0 +1,123 @@
+{
+  "runId": "2ae4e995",
+  "agent": "researcher",
+  "task": "Read-only strategy review for cnm Epic `.cs/epics/001-o-offline-commit-flow/spec.md`, artifact reports 034/035/036, and relevant dataset scripts. The maintained product constraints are fully offline shipped 0.5B <=700MB, seven styles, arbitrary guidance, multi-line. Previous source-message labels and 14B-generated labels failed zero-critical gates. Evaluate the proposed next bounded pierce: use human source commit messages as candidate targets, but a local 14B teacher acts only as a strict complete-diff support/material-completeness rejection filter; accept only intersection of two independent critic passes; select a fresh disjoint 200-family pilot and run two independent semantic reviewers. Identify whether this has a materially different failure mechanism, minimum protocol, leakage/reproducibility risks, and a better minimal alternative if any. Do not edit files or inspect source commit messages beyond what existing reports already state. Return a concise recommendation and hard STOP gates.\n\n---\n**Output:**\nWrite your findings to exactly this path: /Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/outputs/2ae4e995/parallel-0/0-researcher/research.md\nThis path is authoritative for this run.\nIgnore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.",
+  "exitCode": 1,
+  "usage": {
+    "input": 39,
+    "output": 8650,
+    "cacheRead": 273321,
+    "cacheWrite": 53733,
+    "cost": 0.7321867500000001,
+    "turns": 13
+  },
+  "model": "bytetrueapi/gpt-5.6-sol:medium",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:medium"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:medium",
+      "success": false,
+      "exitCode": -2,
+      "usage": {
+        "input": 27,
+        "output": 3446,
+        "cacheRead": 133432,
+        "cacheWrite": 25602,
+        "cost": 0.3302435,
+        "turns": 9
+      }
+    }
+  ],
+  "durationMs": 400969,
+  "toolCount": 59,
+  "error": "Agent 'researcher' requested unavailable child tools: fetch_content, get_search_content.\nThe `tools` field is a strict allowlist; it does not load extension code.\nFor extension tools, add the provider path to `subagentOnlyExtensions` (child-only), `extensions`, or as a path-like entry in `tools`, while keeping each registered tool name in `tools`.\nFor MCP tools, verify the MCP adapter configuration and selected tool names. For builtin tools, verify the name against the installed Pi version.",
+  "launchContractDigest": "ecfb9d39ee98c74370cb0385c00b302c80600b0b3741176f7284ae346908b03d",
+  "acceptance": {
+    "status": "attested",
+    "evidenceStatus": "attested",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "Concrete severity-ranked findings cite the Epic, artifact reports 034/035/036, and dataset/audit scripts; hard STOP gates and residual risks are stated."
+        }
+      ],
+      "changedFiles": [],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "Read-only inspection of the Epic, reports 034/035/036, rubrics, and relevant dataset/audit scripts",
+          "result": "passed",
+          "summary": "Reviewed specified persisted evidence without inspecting source commit messages."
+        }
+      ],
+      "validationOutput": [
+        "Recommendation limited to a bounded filter-validation pilot; no corpus build, student training, or Git rewrite authorized.",
+        "Artifact written to the authoritative runtime output path."
+      ],
+      "residualRisks": [
+        "Two passes of one 14B model have correlated blind spots and are not genuinely independent semantic evidence.",
+        "Filtering may select trivial rows and collapse body, multi-file, long-context, language, or style coverage.",
+        "The pierce does not validate arbitrary guidance, seven-style conditioning, or final 0.5B student quality.",
+        "A zero-critical 200-family pilot cannot guarantee zero critical labels in a later full corpus."
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "No project files edited; only the required external research artifact was written.",
+      "reviewFindings": [
+        "high: proposed critic intersection removes teacher-authored target errors but retains source-message false-acceptance risk proven by #34",
+        "high: same-model critic passes are correlated and must remain a prefilter, never the semantic gate",
+        "high: reviewing only accepted rows creates selection leakage and hides false rejects/coverage collapse; review all pre-frozen 200 families",
+        "high: passing this pierce cannot authorize training because guidance, seven styles, and multi-line augmentation remain unproven",
+        "medium: #34 heuristic target transforms must be frozen and audited as part of the candidate target",
+        "medium: all #34/#35 leakage, freeze, provenance, token-limit, and reviewer-blinding controls must be retained"
+      ],
+      "manualNotes": "Read-only review; source commit messages were not inspected."
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/2ae4e995_researcher_0_transcript.jsonl",
+  "timestamp": 1785069964914
+}

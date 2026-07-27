@@ -1,0 +1,29 @@
+{
+  "status": "frozen_pre_output",
+  "teacher_role": "correlated_rejection_filter_only",
+  "model": {
+    "repo": "Qwen/Qwen2.5-Coder-14B-Instruct-GGUF",
+    "revision": "d0a692ef765eefbf2fabb130b3cb2e8917e3d225",
+    "file": "/tmp/cnm-pierce35/model/qwen2.5-coder-14b-instruct-q6_k.gguf",
+    "bytes": 12124683712,
+    "sha256": "302a079369ad8b66c8e8ec1bfa62d109c64d8015e9bfd52d9c6cf4c6c9f36b5f"
+  },
+  "runtime": {
+    "file": "/opt/homebrew/bin/llama-server",
+    "version": "9430 (d48a56eff)",
+    "sha256": "7b1151b319e977564a5422aa00902f64edb87b350c02b65f8dc44c5e183deeea",
+    "host": "127.0.0.1",
+    "port": 63287,
+    "ctx_size": 9216,
+    "parallel": 1
+  },
+  "decode": {
+    "temperature": 0,
+    "top_p": 1,
+    "top_k": 0,
+    "seed": 424242,
+    "max_tokens": 512,
+    "content_retries": 0
+  },
+  "views": ["support", "completeness"]
+}

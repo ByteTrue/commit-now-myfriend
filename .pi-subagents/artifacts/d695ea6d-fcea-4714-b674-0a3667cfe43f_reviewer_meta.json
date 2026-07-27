@@ -1,0 +1,120 @@
+{
+  "runId": "d695ea6d-fcea-4714-b674-0a3667cfe43f",
+  "agent": "reviewer",
+  "task": "Second pre-output audit for #35 after fixes. Do not edit and never inspect source commit messages. Read GitHub #35, current issue-spec, manifests/rubric/instructions, and all artifact 035 scripts/tests. Specifically verify closure of prior blockers: reviewer slices expose no repo/commit identity; one score set cannot count twice and fresh-run provenance is required; merge enforces mechanical/body/smoke/over-limit gates; exact frozen localhost teacher process/model ownership is enforced; metadata-only file sections enter near-duplicate leakage; all imported/tokenizer dependencies are frozen. Look for new false-GO paths or code/runtime errors in run_teacher.py, leakage_v2.py, build_leakage_exclusions.py, build_pilot.py, prepare_audit.py, merge_scores.py. The v2 pilot is rebuilding, so transient old pilot hashes are not a blocker. Return concise severity-ranked findings and GO/FIX-BEFORE-OUTPUT.\n\n## Acceptance Contract\nAcceptance level: attested\nCompletion is not accepted from prose alone. End with a structured acceptance report.\n\nCriteria:\n- criterion-1: Return concrete findings with file paths and severity when applicable\n\nRequired evidence: review-findings, residual-risks\n\nFinish with a fenced JSON block tagged `acceptance-report` in this shape:\nUse empty arrays when no items apply; array fields contain strings unless object entries are shown.\n`criteriaSatisfied[].status` must be exactly one of: satisfied, not-satisfied, not-applicable.\n`commandsRun[].result` must be exactly one of: passed, failed, not-run.\n`manualNotes` and `notes` are optional strings; an empty string means no note and does not satisfy `manual-notes` evidence.\n```acceptance-report\n{\n  \"criteriaSatisfied\": [\n    {\n      \"id\": \"criterion-1\",\n      \"status\": \"satisfied\",\n      \"evidence\": \"specific proof\"\n    }\n  ],\n  \"changedFiles\": [\n    \"src/file.ts\"\n  ],\n  \"testsAddedOrUpdated\": [\n    \"test/file.test.ts\"\n  ],\n  \"commandsRun\": [\n    {\n      \"command\": \"command\",\n      \"result\": \"passed\",\n      \"summary\": \"short result\"\n    }\n  ],\n  \"validationOutput\": [\n    \"validation output or concise summary\"\n  ],\n  \"residualRisks\": [\n    \"none\"\n  ],\n  \"noStagedFiles\": true,\n  \"diffSummary\": \"short description of the diff\",\n  \"reviewFindings\": [\n    \"blocker: file.ts:12 - issue found, or no blockers\"\n  ],\n  \"manualNotes\": \"anything else the parent should know\"\n}\n```",
+  "exitCode": 0,
+  "model": "bytetrueapi/gpt-5.6-sol:high",
+  "attemptedModels": [
+    "bytetrueapi/gpt-5.6-sol:high"
+  ],
+  "modelAttempts": [
+    {
+      "model": "bytetrueapi/gpt-5.6-sol:high",
+      "success": true,
+      "exitCode": 0,
+      "usage": {
+        "input": 21,
+        "output": 6173,
+        "cacheRead": 177555,
+        "cacheWrite": 75916,
+        "cost": 0.7485475,
+        "turns": 7
+      }
+    }
+  ],
+  "acceptance": {
+    "status": "attested",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "attested",
+      "explicit": false,
+      "inferredReason": [
+        "read-only/reviewer-style agent"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Return concrete findings with file paths and severity when applicable",
+          "evidence": [
+            "review-findings",
+            "residual-risks"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "review-findings",
+        "residual-risks"
+      ],
+      "verify": [],
+      "stopRules": []
+    },
+    "inferredReason": [
+      "read-only/reviewer-style agent"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Return concrete findings with file paths and severity when applicable",
+        "evidence": [
+          "review-findings",
+          "residual-risks"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [],
+    "verifyRuns": [],
+    "childReport": {
+      "criteriaSatisfied": [
+        {
+          "id": "criterion-1",
+          "status": "satisfied",
+          "evidence": "Severity-ranked findings cite teacher-environment.txt:3-7, freeze.py:31, merge_scores.py:132-136, build_pilot.py:352-356, and check_limits.py:31; verified closures cite prepare_audit.py:49-58, merge_scores.py:25-137, and leakage_v2.py:10-41."
+        }
+      ],
+      "changedFiles": [],
+      "testsAddedOrUpdated": [],
+      "commandsRun": [
+        {
+          "command": "gh issue view 35 --repo ByteTrue/commit-now-myfriend --json number,title,body,labels,state,url",
+          "result": "passed",
+          "summary": "Read the complete current GitHub issue without inspecting source commit messages."
+        },
+        {
+          "command": "python3 -m unittest discover -s .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts -p 'test_*.py' -v",
+          "result": "failed",
+          "summary": "Five tests passed; test_pilot and test_teacher_tools failed to import because pyarrow is unavailable in the current Python environment."
+        },
+        {
+          "command": "python3 -m py_compile .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/*.py",
+          "result": "passed",
+          "summary": "All artifact 035 Python scripts compiled successfully."
+        }
+      ],
+      "validationOutput": [
+        "Reviewer slices contain no explicit repo, commit, source-message, or model-identity fields.",
+        "Reviewer score paths, reviewer literals, slice hashes, score hashes, and disjoint fresh run IDs are required.",
+        "Metadata-only rename leakage test passed.",
+        "Final ownership gate does not distinguish smoke/full provenance or enforce recorded runtime/listener evidence.",
+        "Dependency manifest is not a complete or runtime-enforced lock.",
+        "Over-limit output-slot check falls back to the non-existent filename prefix 'never'."
+      ],
+      "residualRisks": [
+        "Full unit execution remains unverified in the frozen Python 3.12 environment.",
+        "The v2 pilot was rebuilding; transient pilot/freeze hashes were intentionally not assessed as blockers."
+      ],
+      "noStagedFiles": true,
+      "diffSummary": "Review-only audit; no files changed.",
+      "reviewFindings": [
+        "blocker: .cs/epics/001-o-offline-commit-flow/artifacts/035/teacher-environment.txt:3-7 and scripts/freeze.py:31 - transitive imported dependencies are not completely frozen or runtime-verified.",
+        "high: .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/merge_scores.py:132-136 - ownership gate accepts mismatched smoke/full provenance because it ignores mode, runtime, listener, command, PID, and served-path evidence.",
+        "medium: .cs/epics/001-o-offline-commit-flow/artifacts/035/scripts/check_limits.py:31 - over-limit no-output check is vacuous because the frozen over-limit row has no index and the check searches for prefix 'never'."
+      ],
+      "manualNotes": "Verdict: FIX-BEFORE-OUTPUT. No source commit messages were inspected."
+    }
+  },
+  "transcriptPath": "/Users/byte/workspace/projects/commit-now-myfriend/.pi-subagents/artifacts/d695ea6d-fcea-4714-b674-0a3667cfe43f_reviewer_transcript.jsonl",
+  "skills": [],
+  "timestamp": 1784979787371
+}

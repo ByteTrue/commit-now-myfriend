@@ -1,0 +1,22 @@
+{
+  "captured_at": "2026-07-25T16:15:00+08:00",
+  "host": {
+    "model": "MacBook Pro",
+    "model_identifier": "Mac17,8",
+    "chip": "Apple M5 Pro",
+    "cpu_cores": 18,
+    "gpu_cores": 20,
+    "unified_memory_bytes": 51539607552
+  },
+  "mlx": {
+    "version": "0.32.0",
+    "device_architecture": "applegpu_g17s",
+    "max_recommended_working_set_size": 40200896512,
+    "smoke_peak_limit_bytes": 32160717209
+  },
+  "baseline": {
+    "memory_pressure_free_percent": 89,
+    "swap_used_bytes": 0
+  },
+  "privacy": "Whitelisted fields only; host name, user name, serial, UUID, UDID and activation state are intentionally absent."
+}
